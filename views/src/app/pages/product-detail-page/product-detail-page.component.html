@@ -1,0 +1,109 @@
+<div class="pageContentWrapper">
+    <div class="container">
+        <div class="row">
+        <div class="col-md-6">
+            <div id="carousel" class="carousel slide" data-ride="carousel">
+                
+                <span *ngIf="hasDiscount" class="discount-badge">Save up to {{save_percent}}%</span>
+                <div class="carousel-inner">
+                    <div class="carousel-item "  *ngFor="let image of images; let i = index;" [ngClass]="{'active': i === 0}" >
+                        <img src={{image.src}}>
+                    </div>
+                </div>
+            </div> 
+        <div class="clearfix">
+            <div id="thumbcarousel" class="carousel slide" data-interval="false">
+                <div class="carousel-inner">
+                    <div *ngFor="let image of carouselImages; let i = index;" class="carousel-item"  [ngClass]="{'active': i === 0}">
+                        <div data-target="#carousel" attr.data-slide-to={{i*4}} class="thumb carousel-thumb-spacing" ><img src={{image[0].src}}></div>
+                        <div *ngIf="image[1] != {}" data-target="#carousel" attr.data-slide-to={{(i*4)+1}} class="thumb carousel-thumb-spacing" ><img src={{image[1].src}}></div>
+                        <div *ngIf="image[2] != {}" data-target="#carousel" attr.data-slide-to={{(i*4)+2}} class="thumb carousel-thumb-spacing" ><img src={{image[2].src}}></div>
+                        <div *ngIf="image[3] != {}" data-target="#carousel" attr.data-slide-to={{(i*4)+3}} class="thumb carousel-thumb" ><img src={{image[3].src}}></div>
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#thumbcarousel" role="button" data-slide="prev">
+                    <img class="carousel-control-btn" src="assets/img/left-arrow.png">
+                </a>
+                <a class="carousel-control-next" href="#thumbcarousel" role="button" data-slide="next">
+                    <img class="carousel-control-btn" src="assets/img/right-arrow.png">
+                </a>
+            </div> <!-- /thumbcarousel -->
+        </div><!-- /clearfix -->
+        </div> <!-- /col-sm-6 -->
+        <div class="col-sm-6" style="margin-top: 20px">
+            <h5 style="margin-bottom: 1px !important;">{{name}}</h5>
+            <!-- <span>Product Short Details</span> -->
+            <h6 class="mt-3">Quick Product Details</h6>
+            <div style="margin-inline-start: -20px !important;" [innerHTML]="short_info">
+            </div>
+            <del *ngIf="sale_price!=0" style="color: grey">₱{{regular_price}}</del>
+            <span class="price-badge">₱{{ sale_price!=0? sale_price : regular_price!=0? regular_price : price}}</span>
+            <span *ngIf="sale_price!=0" style="color: #d0011b">Save ₱{{discount}}</span>
+            <div class="quantity-holder d-flex justify-content-start">
+                <span class="cart-qty" style="margin-top: 10px;">Qty:</span>
+                <div class="number-spinner">
+                    <ngx-number-spinner [value]="quantity" (change)="changeQty($event)" [min]="1"></ngx-number-spinner>
+                </div>
+            </div>
+            <div *ngIf="variationIds.length > 0">
+                <h6 class="mt-3">Variations</h6>
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary" *ngFor="let variation of variations; let i = index;"  [ngClass]="{ active: i == 0 }"  (click)="changeVariant(variationIds[i])">
+                        <input type="radio" name="options" id="{{'option' + variationIds[i]}}" autocomplete="off" [value]="variationIds[i]" [(ngModel)]="variant"> {{variation}}
+                    </label>
+                </div>
+            </div>
+            <div class="d-flex justify-content-start">
+                <button class="btn-add" style="background-color: #0ca6ea; color: white; margin-right: 10px !important;" (click)="addToCart()">Add To Cart</button>
+                <button class="btn-add" style="background-color: #fcaf43;">Add To Wishlist</button>
+            </div>
+        </div> <!-- /col-sm-6 -->
+          
+        <ul class="nav nav-pills mb-3 mt-5" id="pills-tab" style="width: 100%; background: #044377;" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="pills-pd-tab" data-toggle="pill" role="tab" href="#pills-pd" aria-controls="pills-ps" aria-selected="true">Product Description</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="pills-specs-tab" data-toggle="pill" role="tab" href="#pills-specs" aria-controls="pills-specs" aria-selected="false">Features</a>
+            </li>
+            <!-- <li class="nav-item">
+              <a class="nav-link" id="pills-reviews-tab" data-toggle="pill" role="tab" aria-controls="pills-reviews" aria-selected="false">Reviews</a>
+            </li> -->
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-pd" role="tabpanel" aria-labelledby="pills-pd-tab" [innerHTML]="description">
+            </div>
+            <div class="tab-pane fade" id="pills-specs" role="tabpanel" aria-labelledby="pills-specs-tab">
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+            </div>
+            <!-- <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+                <span>Specs Specs Specs Specs Specs Specs</span>
+            </div> -->
+          </div>
+        </div> <!-- /row -->
+    </div> <!-- /container -->
+    <div class="spacer"></div>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-spin" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+    
+</div>

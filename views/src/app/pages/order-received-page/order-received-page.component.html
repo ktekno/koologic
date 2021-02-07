@@ -1,0 +1,83 @@
+<div class="order-received-page">
+    <div class="spacer"></div>
+    <div class="order-received-page-content">
+        <div class="logo-header d-flex justify-content-between">
+            <!-- <img src="assets/img/Asset 3@4x.png" class="logo"> -->
+            <div style="margin: auto">
+                <img src="assets/img/Asset 7@2x.png" class="logo"><span class="logo-text">oologic</span>
+            </div>
+        </div>
+        <div class="order-received-header d-flex justify-content-between mt-5 mb-5">
+            <span class="thank-you-header">Thank you for shopping with us</span>
+        </div>
+        <span class="header-text">Hi {{first_name}} {{last_name}}</span>
+        <p class="mb-5">We received your order <a href="/order-details/{{id}}">{{id}}</a> on {{ date_created }} and you paid this via {{ payment_method_title }}. We are getting your order ready and will let you know once it's on its way. We wish you enjoy shopping and hope to see you again soon!</p>
+        <span class="header-text">✔️ Paid via {{ payment_method_title }}</span>
+        <div class="line-divider mb-3"></div>
+        <span class="header-text">Delivery Details</span>
+        <table class="info-table mt-3">
+            <tr>
+                <td width=100>
+                    Name
+                </td>
+                <td style="font-weight: 500;">
+                    {{first_name}} {{last_name}}
+                </td>
+            </tr>
+            <tr>
+                <td width=100 style="vertical-align: top;">
+                    Address
+                </td>
+                <td style="font-weight: 500; ">
+                    {{ address }}
+                </td>
+            </tr>
+            <tr>
+                <td width=100>
+                    Email
+                </td>
+                <td style="font-weight: 500;">
+                    {{ email }}
+                </td>
+            </tr>
+            <tr>
+                <td width=100>
+                    Phone
+                </td>
+                <td style="font-weight: 500;">
+                    {{ phone }}
+                </td>
+            </tr>
+        </table>
+        <div class="line-divider mb-3"></div>
+        <span class="header-text">Product Details</span>
+        <div class="spacer"></div>
+        <ng-container *ngFor="let ordered_content of ordered_contents; let i = index;">
+            <div class="ordered-products d-flex justify-content-between mb-3">
+                <div class="ordered-products d-flex justify-content-start mb-3">
+                    <img src={{ordered_content.imgSrc}} class="ordered-item mr-4">
+                    <div class="specs-holder">
+                        <span style="font-weight: bold;">{{ordered_content.titleSpecs}}</span><br>
+                        <span [innerHTML]="ordered_content.subSpecs"></span>  
+                        <div *ngIf="isSmallMobileDevice == true" class="price-holder d-flex justify-content-between">
+                            <span style="width: 100%; margin: auto;">{{ordered_content.quantity}}</span>
+                            <span style="width: 100%; margin: auto;">&nbsp;x&nbsp;</span>
+                            <span style="font-weight: bold;">₱{{ordered_content.discountedPrice != ""? ordered_content.discountedPrice.toLocaleString(undefined, {minimumFractionDigits: 2}) : ordered_content.regularPrice.toLocaleString(undefined, {minimumFractionDigits: 2})}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="isSmallMobileDevice == false"  class="price-holder d-flex justify-content-between">
+                    <span style="width: 100%; margin: auto;">{{ordered_content.quantity}}</span>
+                    <span style="width: 100%; margin: auto;">x</span>
+                    <span style="font-weight: bold;">₱{{(ordered_content.discountedPrice? ordered_content.discountedPrice : ordered_content.regularPrice).toLocaleString(undefined, {minimumFractionDigits: 2})}}</span>
+                </div>
+            </div>
+        </ng-container>
+        <div class="line-divider mb-3"></div>
+        <app-cart-summary-table [showShippingFee]="true" [shippingFeeVal]="shippingFeeVal" [tableContent]="order_table" [voucherVal]="voucherVal"></app-cart-summary-table>
+        <div class="spacer"></div>
+    </div>
+    <div class="spacer"></div>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-spin" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+    
+</div>

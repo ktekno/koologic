@@ -1,0 +1,27 @@
+<div class="register-page">
+    <div class="spacer"></div>
+    <div class="register-page-content">
+        <div *ngIf="isSuccess == -1">
+            <h3 class="mt-3 mb-3 d-flex justify-content-around" style="color: #154f80; font-weight: bold;">Register Account</h3>
+            <div class="name-holder d-flex justify-content-between">
+                <input class="register-input name-input" id="first_name" name="first_name" placeholder="First Name" [(ngModel)]="first_name">
+                <input class="register-input name-input" id="last_name" name="last_name" placeholder="Last Name" [(ngModel)]="last_name">
+            </div>
+            <input class="register-input w-100 mt-2" id="email" name="email" placeholder="Email Address"  [(ngModel)]="email">
+            <input class="register-input w-100 mt-2" id="phone"  name="phone" placeholder="Phone Number"  [(ngModel)]="phone_number">
+            <input class="register-input w-100 mt-2" id="password1"  type="password" name="password1" placeholder="Create Password" [(ngModel)]="password">
+            <input class="register-input w-100 mt-2" id="password2"  type="password" name="password2" placeholder="Confirm Password" [(ngModel)]="confirm_password">
+            <p class="mt-2" style="color: #969696; text-align: center;">By clicking Register, you agree to our <a href="">Terms, Data Policy</a> and  <a href="">Cookies Policy</a>. You may receive SMS notification from us and can opt out anytime</p>
+            <button class="register-button" style="background:#154f80; color:white;" (click)="registerUser()">Register</button>
+            <a class="d-flex justify-content-around mt-2" style="color: #969696;" href="/login">Back to Login</a>
+        </div>
+        <div *ngIf="isSuccess == 1" class="alert alert-success mt-3">
+            <strong>Success!</strong> User info has been registered. Please check your email for verification
+        </div>
+        <div *ngIf="isSuccess == 0" class="alert alert-danger mt-3">
+            <strong>Error!</strong> Cannot register for some reason. Please refresh and try again
+        </div>
+    </div>
+    <div class="spacer"></div>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-spin" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+</div>

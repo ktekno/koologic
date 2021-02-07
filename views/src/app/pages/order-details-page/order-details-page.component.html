@@ -1,0 +1,95 @@
+<div class="pageContentWrapper">
+    <div class="spacer"></div>
+    <div class="show-orders-page-content">
+        <span style="font-weight: bold;">Order Details</span><br><br> 
+        <table class="table-borderless" style="margin: auto ; border-bottom: hidden; width: 100%;">
+            <tbody>
+                <tr style="border-bottom: 0;">
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; width: 50%;">
+                        Order ID：
+                    </td>
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; ">
+                        {{ id }}
+                    </td>
+                </tr>
+                <tr style="border-bottom: 0;">
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; width: 50%;">
+                        Order Published：
+                    </td>
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; ">
+                        {{ order_date }}
+                    </td>
+                </tr>
+                <tr style="border-bottom: 0;">
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; width: 50%;">
+                        Address：
+                    </td>
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; ">
+                        {{ address }}
+                    </td>
+                </tr>
+                <tr style="border-bottom: 0;">
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; width: 50%;">
+                        Email ：
+                    </td>
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; ">
+                        {{ email }}
+                    </td>
+                </tr>
+                <tr style="border-bottom: 0;">
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; width: 50%;">
+                        Phone ：
+                    </td>
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; ">
+                        {{ phone }}
+                    </td>
+                </tr>
+                <tr style="border-bottom: 0;">
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; width: 50%;">
+                        Status：
+                    </td>
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; ">
+                        {{ status }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="cart-table" class="order-table mt-2" data-mobile-responsive="true">
+            <tbody>
+               <tr style="background-color: #fbfbfb;">
+                  <th scope="col" style="font-weight: bold; font-style: normal !important; font-size: 16px;">Order Info</th>
+                  <th scope="col" style="font-weight: bold; font-style: normal !important; font-size: 16px;">Totals</th>
+               </tr>
+               
+               <tr>
+                  <td><span *ngFor="let item of items"><a href="/product/{{ item.slug }}">{{ item.name }} x {{ item.quantity }}</a> <br></span></td>
+                  <td><span *ngFor="let item of items"><strong>₱{{ item.total }}</strong><br></span></td>
+               </tr>
+               
+               <tr>
+                  <td><strong>Total:</strong></td>
+                  <td><strong>₱{{ partial_total }}</strong></td>
+               </tr>
+               <tr>
+                  <td><strong>Voucher:</strong></td>
+                  <td><strong>- ₱0</strong></td>
+               </tr>
+               <tr>
+                  <td><strong>Shipping Fee:</strong></td>
+                  <td><strong>₱{{ shippingFeeVal }}</strong></td>
+               </tr>
+               <tr>
+                  <td><strong>Payment Method:</strong></td>
+                  <td><strong>{{ payment_method_title }}</strong></td>
+               </tr>
+               <tr>
+                  <td><strong>Grand Total:</strong></td>
+                  <td><strong>₱{{ total_price }}</strong></td>
+               </tr>
+            </tbody>
+         </table>
+         <button class="continueshopping">Continue Shopping</button>
+    </div>
+    <div class="spacer"></div>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-spin" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+</div>

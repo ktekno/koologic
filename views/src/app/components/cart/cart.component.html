@@ -1,0 +1,34 @@
+<ng-container>
+<div class="sidenav" id="cartNavBar" [ngStyle]="{'width':  _appService.cartNavBarWidth}">
+    <a href="javascript:void(0)" class="closebtn" (click)="_appService.closeNav()">&times;</a> 
+    <div class="cart-navbar-main d-flex flex-column">
+        <div class="cart-holder">
+            <span style="font-weight: bolder;">My Cart</span>
+            <ng-container *ngFor="let cart_content of _appService.cart_contents; let i = index;">
+                <div class="cart-item-container">
+                    <div class="d-flex justify-content-start cart-spec-holder">
+                        <span class="item-classification-badge" [ngStyle]="cart_content.itemClassification == 'discount'? {'background' : '#d0011b'} : cart_content.itemClassification == 'new-arrival'? {'background' : '#0ca6ea'} : {}">{{cart_content.itemClassificationBadge}}</span>
+                        <img src={{cart_content.imgSrc}} class="cart-item mr-4">
+                        <div class="specs-holder">
+                            <span style="font-weight: bold;">{{cart_content.titleSpecs}}</span><br>
+                            <span [innerHTML]="cart_content.subSpecs"></span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start mt-2">
+                        <div class="d-flex justify-content-start">
+                            <button class="cart-delete mr-2" (click)="deleteFromCart(i)">X</button>
+                            <button class="cart-detail"  (click)="goToDetails(i)">Details</button>
+                        </div>
+                        <span class="cart-multiplier">{{cart_content.quantity}} x &nbsp;</span>
+                        <span class="cart-price">₱{{cart_content.discountedPrice != ""? cart_content.discountedPrice : cart_content.regularPrice}}</span>
+                    </div>
+                </div>
+            </ng-container>
+        </div> 
+        <div class="cart-footer d-flex flex-column mb-3">
+            <button class="cart-button" style="background:#fcaf43; color:white;" (click)="_appService.closeNav()" [routerLink] = "'/checkout'">Proceed to Checkout</button>
+            <button class="cart-button" style="background:#0ca6ea; color:black;" (click)="_appService.closeNav()" [routerLink] = "'/cart'">View My Cart</button>
+        </div> 
+    </div>
+</div>
+</ng-container>

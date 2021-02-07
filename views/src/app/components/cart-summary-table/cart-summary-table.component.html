@@ -1,0 +1,35 @@
+<div id="summary-holder">
+    <span style="font-weight: bold;">Summary</span>
+    <table class="summary-table">
+        <tr style="height: 20px;">
+          <th style="font-weight: normal !important;">{{getQuantityTotal()}} Items</th>
+          <th style="text-align: right;">₱{{getPriceTotal().toLocaleString(undefined, {minimumFractionDigits: 2})}}</th>
+        </tr>
+        <tr *ngFor="let cart_content of tableContent; let i = index;">
+            <td class="summary-table-td-first" style="text-align: left; width: 80%;">
+                {{cart_content.quantity}} x {{cart_content.titleSpecs}}
+            </td>
+            <td style="text-align: right;">
+                ₱{{cart_content.priceBadge.toLocaleString(undefined, {minimumFractionDigits: 2})}}
+            </td>
+        </tr>
+        <tr style="vertical-align: top; height: 40px;" *ngIf="showShippingFee">
+            <th style="font-weight: normal !important; text-align: left;">
+                Shipping Fee
+            </th>
+            <th id="shipping-fee-value" style="text-align: right;">
+                ₱{{ shippingFeeVal }}
+            </th>
+        </tr>
+        <tr style="vertical-align: top; height: 40px;"  *ngIf="voucherVal != 0">
+          <th style="font-weight: normal !important; text-align: left; border-bottom: 1px solid #dddddd;">Voucher</th>
+          <th style="text-align: right; border-bottom: 1px solid #dddddd;">-₱{{ voucherVal }}</th>
+        </tr>
+    </table>
+    <table class="summary-table mt-2">
+          <tr style="height: 20px;">
+            <th>Total</th>
+            <th style="text-align: right;">₱{{ (getPriceTotal() + shippingFeeVal - voucherVal).toLocaleString(undefined, {minimumFractionDigits: 2})}}</th>
+          </tr>
+    </table>
+  </div>

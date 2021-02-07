@@ -1,0 +1,117 @@
+<div class="pageContentWrapper">
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-12 filters">
+                <div class="d-flex flex-row justify-content-between align-items-center mb-3">
+                    <h6 style="margin-bottom: 0px !important;">Result: {{ search_string }}</h6>
+                    <div class="right-sort">
+                        <div class="sort-by"><span class="mr-1">Sort by:</span>  <select name="sort" id="sort">
+                            <option value="1">Most Popular</option>
+                            <option value="2">Alphabetical</option>
+                            <option value="3">Price - High to Low</option>
+                            <option value="4">Price - Low to High</option>
+                          </select>
+                        </div>
+                    </div>
+                </div>
+                <span style="color: #969696;">Showing 1 to {{search_results.length}} of {{search_results.length}} products</span>
+            </div>
+        </div>
+        <div class="product-list row mt-3">
+            <div *ngFor="let search_result of search_results;" class="responsive-col mt-3">
+                <div class="product-item-image" [routerLink]="['/product/', search_result.slug]">
+                    <span *ngIf="search_result.save_percent > 0" class="item-classification-badge">Sale {{ search_result.save_percent }}%</span>
+                    <img src="{{search_result.images[0].src}}" class="product-item-carousel">
+                    <div  class="d-flex justify-content-after"> 
+                        <span class="price-badge">P{{search_result.price | number : '1.2-2'}}</span>
+                    </div>
+                </div>
+                <div class="specs-holder"  [routerLink]="['/product/', search_result.slug]">
+                    <span style="font-weight: bold;">{{ search_result.name }}</span><br>
+                    <!-- <span >Specs Specs Specs<br>Specs Specs Specs</span> -->
+                </div>
+            </div>
+            <!-- <div class="responsive-col mt-3">
+                <div class="product-item-image" [routerLink]="'/product'">
+                    <span class="item-classification-badge">Sale 50%</span>
+                    <img src="/assets/temp-img/lenovo.png" class="product-item-carousel">
+                    <div  class="d-flex justify-content-after"> 
+                        <span class="price-badge">P10,000.00</span>
+                    </div>
+                </div>
+                <div class="specs-holder"  [routerLink]="'/product'">
+                    <span style="font-weight: bold;">Specs</span><br>
+                    <span >Specs Specs Specs<br>Specs Specs Specs</span>
+                </div>
+            </div>
+            <div class="responsive-col mt-3">
+                <div class="product-item-image" [routerLink]="'/product'">
+                    <span class="item-classification-badge">Sale 50%</span>
+                    <img src="/assets/temp-img/lenovo.png" class="product-item-carousel">
+                    <div  class="d-flex justify-content-after"> 
+                        <span class="price-badge">P10,000.00</span>
+                    </div>
+                </div>
+                <div class="specs-holder"  [routerLink]="'/product'">
+                    <span style="font-weight: bold;">Specs</span><br>
+                    <span >Specs Specs Specs<br>Specs Specs Specs</span>
+                </div>
+            </div>
+            <div class="responsive-col mt-3">
+                <div class="product-item-image" [routerLink]="'/product'">
+                    <span class="item-classification-badge">Sale 50%</span>
+                    <img src="/assets/temp-img/lenovo.png" class="product-item-carousel">
+                    <div  class="d-flex justify-content-after"> 
+                        <span class="price-badge">P10,000.00</span>
+                    </div>
+                </div>
+                <div class="specs-holder"  [routerLink]="'/product'">
+                    <span style="font-weight: bold;">Specs</span><br>
+                    <span >Specs Specs Specs<br>Specs Specs Specs</span>
+                </div>
+            </div>
+            <div class="responsive-col mt-3">
+                <div class="product-item-image" [routerLink]="'/product'">
+                    <span class="item-classification-badge">Sale 50%</span>
+                    <img src="/assets/temp-img/lenovo.png" class="product-item-carousel">
+                    <div  class="d-flex justify-content-after"> 
+                        <span class="price-badge">P10,000.00</span>
+                    </div>
+                </div>
+                <div class="specs-holder"  [routerLink]="'/product'">
+                    <span style="font-weight: bold;">Specs</span><br>
+                    <span >Specs Specs Specs<br>Specs Specs Specs</span>
+                </div>
+            </div>
+            <div class="responsive-col mt-3">
+                <div class="product-item-image" [routerLink]="'/product'">
+                    <span class="item-classification-badge">Sale 50%</span>
+                    <img src="/assets/temp-img/lenovo.png" class="product-item-carousel">
+                    <div  class="d-flex justify-content-after"> 
+                        <span class="price-badge">P10,000.00</span>
+                    </div>
+                </div>
+                <div class="specs-holder"  [routerLink]="'/product'">
+                    <span style="font-weight: bold;">Specs</span><br>
+                    <span >Specs Specs Specs<br>Specs Specs Specs</span>
+                </div>
+            </div> -->
+        </div>
+        <!-- TODO: Pagination API -->
+        <!-- <div class="d-flex justify-content-around text-right mt-2">
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                    <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                </ul>
+            </nav>
+        </div> -->
+        <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-spin" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+    
+    </div>
+</div>

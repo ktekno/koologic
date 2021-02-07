@@ -1,0 +1,21 @@
+
+
+#summary-holder{
+    margin-top: 10px;
+}
+
+.summary-table{
+    width: 100%;
+    margin-top: 15px;
+}
+
+.summary-table-td-first{
+    width: 30%;
+    height: 100%;
+    padding-left: 10px;
+}
+
+
+.summary-table tr td{
+    color:  #969696;
+}

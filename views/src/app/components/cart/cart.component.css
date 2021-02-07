@@ -1,0 +1,123 @@
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    background-color: #FFFF;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+    overflow-x: hidden;
+    transition: 0.2s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.1s;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+.cart-navbar-main{
+    position: relative;
+    min-height: 100%;
+}
+
+.cart-holder {
+    margin-left: 30px;
+    margin-right: 30px;
+    min-height: calc(100vh - 164px);
+}
+
+.cart-item-container{
+    margin-top: 15px;
+}
+
+.cart-spec-holder{
+    position: relative;
+}
+
+.cart-item {
+    width: 150px;
+    height: 120px;
+    object-fit: contain;
+    background-color: #f3f3f3;
+}
+
+.item-classification-badge{
+    position: absolute;
+    left:0px;
+    top:0px;
+    /* background:#d0011b; */
+    text-align: center;
+    color:white;
+    padding:5px 10px;
+    font-size:14px;
+}
+
+.cart-delete {
+    width: 40px;
+    background:#e36e6e;
+    text-align: center;
+    color:white; 
+    padding:5px 10px;
+    font-size:14px;
+    border: 0px;
+    max-height: 40px;
+}
+
+.cart-detail {
+    width: 70px;
+    background:#0ca6ea;
+    text-align: center;
+    color:white; 
+    padding:5px 10px;
+    font-size:14px;
+    border: 0px;
+    max-height: 40px;
+}
+
+.cart-multiplier{
+    width: 57%; text-align: right;
+    max-height: 40px;
+}
+.cart-price {
+    background:#044377;
+    text-align: center;
+    color:white; 
+    padding:5px 10px;
+    font-size:14px;
+    max-height: 40px;
+}
+
+.cart-button {
+    border-radius: 4px;
+    margin-top: 10px;
+    margin-left: 30px;
+    margin-right: 30px;
+    text-align: center; 
+    font-weight: bold;
+    padding:5px 10px; 
+    font-size:14px;
+    border: 0px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}

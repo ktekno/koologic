@@ -1,0 +1,22 @@
+
+    <div class="d-flex justify-content-between">    
+        <button class="nav-button" (click)="owlCar.prev()"><img src="assets/img/left-arrow.png"></button>
+        <owl-carousel-o [options]="customOptions" class="cust-owl-carousel" #owlCar>
+            <ng-container *ngFor="let navParam of navParams">
+                <ng-template carouselSlide>
+                    <div class="product-item-image " [routerLink]="['../product',  navParam.slug]">
+                        <span class="item-classification-badge" [ngStyle]="navParam.itemClassification == 'discount'? {'background' : '#d0011b'} : {'background' : '#0ca6ea'}">{{navParam.itemClassificationBadge}}</span>
+                        <img src={{navParam.imgSrc}} class="product-item-carousel">
+                        <div  class="d-flex justify-content-after"> 
+                            <span class="price-badge">₱{{navParam.priceBadge | number:'1.2-2':'en-US' }}</span>
+                        </div>
+                    </div>
+                    <div class="specs-holder"  [routerLink]="['../product',  navParam.slug]">
+                        <span style="font-weight: bold;">{{navParam.titleSpecs}}</span><br>
+                        <span [innerHTML]="navParam.subSpecs"></span>
+                    </div>
+                </ng-template> 
+            </ng-container>
+       </owl-carousel-o>
+        <button class="nav-button" (click)="owlCar.next()"><img src="assets/img/right-arrow.png"></button>
+    </div>

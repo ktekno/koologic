@@ -1,0 +1,45 @@
+.pageContentWrapper{
+    width: 85%;
+    margin: auto;
+    min-height: calc(100vh - 496px);
+}
+.spacer{
+    height: 30px;
+}
+.order-details-page-content{
+    width: 80%;
+    margin: auto;
+    padding: 20px 30px 20px 30px;
+}
+.order-table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #dee2e6
+}
+.order-table td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+
+.continueshopping{
+    height: 40px;
+    background-color: #fcaf43;
+    border: 0px;
+    border-radius: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 15px 0px 15px;
+    font-weight: bold;
+}
+
+@media screen and (max-width: 768px) {
+    .pageContentWrapper{
+        width: 90%;
+    }
+    .order-details-page-content{
+        width: 100%;
+        padding: 0px;
+    }
+}

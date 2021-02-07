@@ -1,0 +1,55 @@
+<div class="pageContentWrapper">
+    <div class="spacer"></div>
+    <div class="show-orders-page-content">
+        <span style="font-weight: bold;">Order History</span><br><br>  
+        <span style="font-weight: bold; color: #969696" class="mb-3">Page {{current_page}} of {{totalPages}}</span>         
+        <table *ngFor="let order of orderList" class="order-table">
+            <tr>
+                <td style="width: 30%;">Order ID:</td>
+                <td style="text-align: right"><a href="/order-details/{{ order.id }}">{{ order.id }}</a></td>
+            </tr>
+            <tr>
+                <td style="width: 30%;">Purchase Date:</td>
+                <td style="text-align: right">{{ dateFormatter(order.date_created) }}</td>
+            </tr>
+            <tr>
+                <td style="width: 30%;">Item total and Price:</td>
+                <td style="text-align: right">{{ computeQuantityTotal(order.line_items) }} pc P{{order.total}}</td>
+            </tr>
+            <tr style="border-bottom: 3px solid #fcaf43;">
+                <td style="width: 30%;">Purchase Details:</td>
+                <td style="text-align: right"><a class="view-details-button" href="/order-details/{{ order.id }}">View Details</a></td>
+            </tr>
+        </table>
+        <!-- <table class="order-table">
+            <tr>
+                <td style="width: 30%;">Order ID:</td>
+                <td style="text-align: right"><a href="/order-details">1234</a></td>
+            </tr>
+            <tr>
+                <td style="width: 30%;">Purchase Date:</td>
+                <td style="text-align: right">12/25/2020</td>
+            </tr>
+            <tr>
+                <td style="width: 30%;">Price and Quantity:</td>
+                <td style="text-align: right">1 pc P10,000.00</td>
+            </tr>
+            <tr style="border-bottom: 3px solid #fcaf43;">
+                <td style="width: 30%;">Purchase Details:</td>
+                <td style="text-align: right"><button class="view-details-button">View Details</button></td>
+            </tr>
+        </table> -->
+        <div class="d-flex justify-content-around text-right mt-2">
+            <nav>
+                <ul class="pagination">
+                    <li *ngIf="current_page > 1" class="page-item"><a class="page-link" href="/show-orders/{{current_page - 1}}" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
+                    <li *ngFor="let page of pageLengthHolder;" class="page-item"><a class="page-link" href="/show-orders/{{page}}" [ngStyle]="{'font-weight': page == current_page? 'bold':'normal' }">{{page}}</a></li>
+                    <li *ngIf="current_page < totalPages" class="page-item"><a class="page-link" href="/show-orders/{{current_page + 1}}" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="spacer"></div>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-spin" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+    
+</div>

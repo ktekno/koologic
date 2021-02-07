@@ -1,0 +1,93 @@
+
+<nav class="header navbar navbar-expand-lg navbar-light">
+    <a class="header-logo d-flex justify-content-start" href="#"><img src="assets/img/Asset 7@2x.png" class="logo"><span style="margin-top: 10px; margin-left: 3px;">oologic</span></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbar">
+        <ul class="navbar-nav mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    PC Peripherals
+                </a>
+                <div class="dropdown-menu dropdown-menu-left text-center" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/category/keyboard-mouse">Keyboard and Mouse</a>
+                    <a class="dropdown-item" href="/category/webcam">Webcams</a>
+                    <a class="dropdown-item" href="/category/storage-devices">Storage Devices</a>
+                    <a class="dropdown-item" href="/category/wireless-connectors">Wireless Connectors</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    OTG Power Sources
+                </a>
+                <div class="dropdown-menu dropdown-menu-left text-center" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/category/powerbanks">Powerbanks</a>
+                    <a class="dropdown-item" href="/category/dc-source">DC Sources</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Cable Wires
+                </a>
+                <div class="dropdown-menu dropdown-menu-left text-center" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/category/computer-cable">Computer Cables</a>
+                    <a class="dropdown-item" href="/category/network-cable">Outdoor/Electrical Cables</a>
+                </div>
+            </li>
+            <!-- <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    IOT (Coming Soon)
+                </a>
+                <div class="dropdown-menu dropdown-menu-left text-center" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/category">LAN Cable</a>
+                    <a class="dropdown-item" href="/category">RF Cable</a>
+                    <a class="dropdown-item" href="/category">Electrical</a>
+                </div> 
+            </li>-->
+            <li class="nav-item active">
+                <a class="nav-link" href="#">DIY Projects</a>
+            </li>
+        </ul>
+    </div> 
+    <div class="icon-holder" style="display: flex; justify-content: flex-end" >
+        <a class="nav-link icons" href="/show-orders/1" role="button" aria-haspopup="true" aria-expanded="false">
+            <img src="assets/img/order_list@2x.png" class="icons">
+        </a>
+        <div class="dropdown">
+            <button class="nav-link icons" type="button" id="dropdownUserButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="assets/img/profile@2x.png" class="icons">
+            </button>
+            <div *ngIf="isLogged == true" class="dropdown-menu dropdown-menu-right header-align-menu-right text-center" aria-labelledby="dropdownUserButton">
+                <a class="dropdown-item" href="/user-info">User Info</a>
+                <a class="dropdown-item" href="#" (click)="authService.logout()">Logout</a>
+                <!-- <a class="dropdown-item" href="#">Something else here</a> -->
+            </div>
+            <div *ngIf="isLogged == false" class="dropdown-menu dropdown-menu-right header-align-menu-right text-center" aria-labelledby="dropdownUserButton">
+                <a class="dropdown-item" href="/login{{ _appService.path != ''? '?path=' + _appService.path : '' }}">Login</a>
+                <!-- <a class="dropdown-item" href="#">Something else here</a> -->
+            </div>
+        </div>
+        <!-- <a class="nav-link icons" href="/login" role="button" aria-haspopup="true" aria-expanded="false">
+            <img src="assets/img/profile@2x.png" class="icons">
+        </a> -->
+    </div> 
+</nav>
+<app-cart #cart></app-cart>  
+<div id="subNavBar" style="display: flex; justify-content: flex-end" >
+    <input type="text" class="searchbar" id="searchbar" name="search" placeholder="Search.." [(ngModel)]="searchbar">
+    <button class="searchbutton" (click)="search(searchbar)">Search</button>
+    <div class="icon-holder" style="display: flex; justify-content: flex-end;" >
+        <a class="nav-link icons cart-icon" role="button" aria-haspopup="true" aria-expanded="false" (click)="_appService.openCart()">
+            <span class="indicator">{{getQuantityTotal()}}</span>
+            <img src="assets/img/cart@2x.png" class="icons">
+        </a>
+        <span style="padding-top: 7px; padding-left: 7px; color: white;">Cart</span>
+        <!-- <a class="nav-link icons" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <img src="assets/img/profile@2x.png" class="icons">
+        </a> -->
+    </div> 
+</div>

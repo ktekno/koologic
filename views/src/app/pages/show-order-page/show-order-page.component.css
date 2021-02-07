@@ -1,0 +1,41 @@
+.pageContentWrapper{
+    width: 85%;
+    margin: auto;
+    min-height: calc(100vh - 496px);
+}
+.spacer{
+    height: 30px;
+}
+.show-orders-page-content{
+    width: 80%;
+    margin: auto;
+    padding: 20px 30px 20px 30px;
+}
+.order-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+.order-table td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.view-details-button{
+    background-color: #0ca6ea;
+    color: white !important;
+    font-weight: bold;
+    border: 0px;
+    padding: 5px 20px 5px 20px;
+}
+
+
+@media screen and (max-width: 768px) {
+    .pageContentWrapper{
+        width: 90%;
+    }
+    .show-orders-page-content{
+        width: 100%;
+        padding: 0px;
+    }
+}

@@ -1,0 +1,116 @@
+.carousel-indicators > li {
+    width: 15px;
+    height: 15px;
+    background-color:  #f3f3f3 !important;
+    border-radius: 50%;
+  }
+.carousel-indicators .active{
+    background-color: #fcaf43 !important;
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  height: 100px;
+  width: 100px;
+  outline: black;
+  background-size: 100%, 100%;
+  background-image: none;
+}
+
+.carousel-control-next-icon:after
+{
+  content: '›';
+  font-size: 45px;
+  color: gray;
+}
+
+.carousel-control-prev-icon:after {
+  content: '‹';
+  font-size: 55px;
+  color: gray;
+}
+
+.category-col {
+    -webkit-box-flex: 0;
+    /* -ms-flex: 0 0 25%; */
+    align-items: flex-start;
+    flex: 0 0 25%;
+    max-width: 25%;
+}
+.category-image{
+    width: 70px;
+    height: 70px;
+    padding: 5px;
+    object-fit: contain;
+    background-color: #f3f3f3;
+}
+
+.announcement-img{
+    width: 49%;
+    background-color: #f3f3f3;
+} 
+
+.product-holder{
+    margin-top: 30px !important;
+    margin:auto;
+}
+
+.product-holder-title{
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.pageContentWrapper{
+    width: 85%;
+    margin: auto;
+    min-height: calc(100vh - 496px);
+}
+
+@media screen and (max-width: 720px) {
+    .announcement-img{
+        margin-top: 20px !important;
+        width: 95%;
+        margin: auto;
+    } 
+    .product-holder{
+        margin-top: 20px;
+        width: 90%;
+    }
+    #announcement-holder{
+        flex-direction: column !important;
+    }
+    
+    .category-col {
+        -webkit-box-flex: 0;
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .announcement-img{
+        margin-top: 30px;
+        width: 95%;
+        margin: auto;
+    } 
+    .product-holder{
+        margin-top: 20px;
+        width: 95%;
+    }
+    
+    #announcement-holder{
+        flex-direction: column !important;
+    }
+    
+    .product-holder-title{
+        margin-left: 15px;
+    }
+
+    .pageContentWrapper{
+        width: 100%;
+        margin: auto;
+    }
+    #top-categories{
+        margin-left: 15px !important;
+    }
+}

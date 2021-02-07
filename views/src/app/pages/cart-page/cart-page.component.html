@@ -1,0 +1,62 @@
+<div class="cart-page">
+    <div class="spacer"></div>
+    <div class="cart-page-content">
+        <span style="font-weight: bolder;">My Cart</span>
+        <table class="cart-table">
+            <tr style="height: 20px;">
+              <th>Item</th>
+              <th>Item Description</th>
+            </tr>
+            <tr *ngFor="let cart_content of _appService.cart_contents; let i = index;">
+              <td class="cart-table-td-first" style="text-align: left;">
+                <img src={{cart_content.imgSrc}} class="cart-item-image mr-4"><br/>
+              </td>
+              <td>
+                <div class="specs-holder">
+                    <div class="d-flex justify-content-between">
+                        <span style="font-weight: bold;">{{cart_content.titleSpecs}}</span>
+                        <button class="cart-delete mr-2" (click)="deleteFromCart(i)">X</button>
+                    </div>
+                <div class="cart-specs">
+                        <span [innerHTML]="cart_content.subSpecs"></span><br><br>
+                        <div *ngIf="cart_content.discountedPrice!=''" style="display:inline">
+                          <del><span>₱{{cart_content.regularPrice.toLocaleString(undefined, {minimumFractionDigits: 2})}}</span></del> - <span style="color: red;">₱{{cart_content.discountedPrice.toLocaleString(undefined, {minimumFractionDigits: 2})}}</span>&nbsp;
+                        </div> 
+                        <span class="price-badge">₱{{cart_content.discountedPrice.toLocaleString(undefined, {minimumFractionDigits: 2})}}</span>
+                    </div>
+                    <div class="price-details d-flex justify-content-between">
+                        <div class="quantity-holder d-flex justify-content-start">
+                            <span class="cart-qty">Qty:</span>
+                            <div class="number-spinner">
+                                <ngx-number-spinner [value]="cart_content.quantity" (change)="change($event, i)" [min]="1"></ngx-number-spinner>
+                            </div>
+                        </div>
+                        <div class="total-price">
+                            <span class="cart-qty">Total price:</span>
+                            <span class="total">₱{{cart_content.priceBadge.toLocaleString(undefined, {minimumFractionDigits: 2})}}</span>
+                        </div>
+                    </div>
+
+                </div>
+              </td>
+            </tr>
+          </table>
+          <button class="continueshopping" [routerLink]="'/'">Continue Shopping</button>
+          <div id="discount-info" class="d-flex justify-content-start">
+            <img src="/assets/img/voucher@2x.png" id="discount-image">
+            <span *ngIf="isAuthenticated" class="discount-notice">*By checking out this shopping cart, you can collect up to <strong>{{ getPriceTotal()/1000 }}</strong> points to be added to your current {{ currentPoints }} points that can be converted into a voucher of KL100(100 points), KL250(250 points) and KL500(500 points).</span>
+            <span *ngIf="!isAuthenticated" class="discount-notice">Please <a href="/login?path=cart">login</a> to view your points</span>
+          </div>
+          <app-cart-summary-table [tableContent]="_appService.cart_contents" [voucherVal]="voucherVal"></app-cart-summary-table>
+          <br>
+          <div id="voucher-holder" class="d-flex justify-content-end">
+            <input class="voucher-input" id="voucher" name="voucher" placeholder="Enter Code..">
+            <button class="voucher-button" (click)="getPoints()">Apply</button>
+          </div>
+          <div *ngIf="isAuthenticated" style="font-size: 14px; text-align: right;">
+            Note: The total points here can only be used in the next purchase and cart total should be greater than your current points.
+          </div>
+          <button class="checkout-button" style="background:#0ca6ea; color:white;" [routerLink] = "'/checkout'">Proceed to Checkout</button>
+    </div>
+    <div class="spacer"></div>
+</div>
