@@ -30,7 +30,7 @@ authApi.post("/auth", async function(req, res){
                             connection.connect();
                             connection.query(`SELECT * FROM wp_cart WHERE user_id = "` + results[0].id + `"`, function (error, cart_results, fields) {
                                 if(error){
-                                    console.log(error);
+                                    console.log(error,"-");
                                 } else {
                                     let cart_contents = typeof req.cookies.cart_contents === "undefined"? [] : JSON.parse(req.cookies.cart_contents);
                                     let count = 0;
@@ -44,9 +44,9 @@ authApi.post("/auth", async function(req, res){
                                             connection.query('UPDATE wp_cart SET quantity = ' + cart_contents[current_prod_index].quantity + ', priceBadge = ' + cart_contents[current_prod_index].priceBadge + ' WHERE user_id = ' + results[0].id + ' AND prod_id = ' + cart_content.prod_id, function (error, new_cart_results, fields) {
                                                 count++;
                                                 if(error){
+                                                    console.log(error,"--");
                                                     return;
                                                 }
-                                                console.log(cart_results,"--");
                                                 if(count == cart_contents.length){
                                                     res.status(200).send({
                                                         success: true,
@@ -63,10 +63,10 @@ authApi.post("/auth", async function(req, res){
                                             connection.query('INSERT INTO wp_cart (user_id, prod_id, quantity, itemClassificationBadge, itemClassification, imgSrc, regularPrice, discountedPrice, priceBadge, titleSpecs, subSpecs, url) VALUES (' + results[0].id + ', ' + cart_content.prod_id + ', ' + cart_content.quantity + ', "' + cart_content.itemClassificationBadge + '", "' + cart_content.itemClassification + '", "' + cart_content.imgSrc + '", ' + cart_content.regularPrice + ', ' + cart_content.discountedPrice + ', "' + cart_content.priceBadge + '", "' + cart_content.titleSpecs + '", "' + cart_content.subSpecs +'", "' + cart_content.url + '")', function (error, new_cart_results, fields) {
                                                 count++;
                                                 if(error){
+                                                    console.log(error,"---");
                                                     return;
                                                 }
                                                 cart_results.push(cart_content);
-                                                console.log(cart_results,"----");
                                                 if(count == cart_contents.length){
                                                     res.cookie('cart_contents', JSON.stringify(cart_contents));
                                                     res.status(200).send({
@@ -92,7 +92,7 @@ authApi.post("/auth", async function(req, res){
                                 }
                             });
                         }).catch((error) => {
-                            console.log(error);
+                            console.log(error,"----");
                             res.status(403).send({
                                 success: false,
                                 message: "Auth Error!"
