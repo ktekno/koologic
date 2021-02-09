@@ -126,6 +126,7 @@ authApi.post('/auth/new', async function (req, res) {
         let response = await wooApi.post("customers", req.body);
         res.status(200).send(response.data);
     } catch(e){
+        console.log(e);
         res.status(500).send(e);
     }
 })
