@@ -1,5 +1,5 @@
 import { NgxSpinnerService } from "ngx-spinner";
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ProductService } from '../../services/product.service';
@@ -8,7 +8,8 @@ import { AppService } from '../../app.service';
 @Component({
   selector: 'app-product-detail-page',
   templateUrl: './product-detail-page.component.html',
-  styleUrls: ['./product-detail-page.component.css']
+  styleUrls: ['./product-detail-page.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ProductDetailPageComponent implements OnInit {
   prod_id: any;
