@@ -1,19 +1,11 @@
 <div class="pageContentWrapper">
    <div id="carouselExampleIndicators" class="carousel slide mt-4" data-ride="carousel">
       <ol class="carousel-indicators">
-         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-         <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-         <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+         <li *ngFor="let carousel of carouselImages; let i = index;" data-target="#carouselExampleIndicators" data-slide-to="i" [ngClass]="i==0? 'active' : ''"></li>
       </ol>
       <div class="carousel-inner">
-         <div class="carousel-item active">
-            <img src="https://www.e-gizmo.net/oc/image/cache/catalog/0layout/homepage/banner/raspi4-800x500.jpg" class="d-block w-100" style="max-height: 500px; object-fit: contain;" alt="...">
-         </div>
-         <div class="carousel-item">
-            <img src="https://www.e-gizmo.net/oc/image/cache/catalog/0layout/homepage/banner/raspi4-800x500.jpg" class="d-block w-100" style="max-height: 500px; object-fit: contain;" alt="...">
-         </div>
-         <div class="carousel-item">
-            <img src="https://www.e-gizmo.net/oc/image/cache/catalog/0layout/homepage/banner/raspi4-800x500.jpg" class="d-block w-100" style="max-height: 500px; object-fit: contain;" alt="...">
+         <div *ngFor="let carousel of carouselImages; let i = index;" class="carousel-item" [ngClass]="i==0? 'active' : ''">
+            <img src="{{carousel}}" class="d-block w-100" style="max-height: 500px; object-fit: contain;" alt="...">
          </div>
       </div>
       <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">

@@ -51,7 +51,7 @@
     width: 70% !important;
     height: 70px !important;
     background-color: #f3f3f3 !important;
-    color: black;
+    color: black !important;
     border: 1px solid #969696;
 }
 .btn-group .active{
@@ -122,11 +122,11 @@
     height: 50px;
 }
 
-:host >>> ngx-number-spinner .horizontal-wrapper{
+ngx-number-spinner .horizontal-wrapper{
     height: 30px;
     margin-top: 10px;
 }
-:host >>> ngx-number-spinner button{
+ngx-number-spinner button{
     padding-top: 0 !important;
     padding-left: 2px !important;
     padding-right: 2px !important;

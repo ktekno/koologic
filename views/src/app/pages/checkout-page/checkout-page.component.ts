@@ -28,6 +28,7 @@ export class CheckoutPageComponent implements OnInit {
   email: string = "";
   phone: string = "";
   voucherVal: number = 0;
+  ref_number: string = "";
 
   constructor(private _elementRef : ElementRef,
               private orderService: OrderService,
@@ -132,6 +133,24 @@ export class CheckoutPageComponent implements OnInit {
     } else {
       this._elementRef.nativeElement.querySelector("#address").style.background = "white";
     }
+    if(this.payment_mode == "gcash"){
+      if(this.ref_number.match(/[0-9]{9,14}/gi) == null){
+        this._elementRef.nativeElement.querySelector("#payment-ref").style.background = "#f8d7da";
+        this._elementRef.nativeElement.querySelector("#payment-ref").scrollIntoView();
+        isValidInput = false;
+      } else {
+        this._elementRef.nativeElement.querySelector("#payment-ref").style.background = "white";
+      }
+    } 
+    if(this.payment_mode == "paypal"){
+      if(this.ref_number.match(/[0-9A-Z]{17}/gi) == null){
+        this._elementRef.nativeElement.querySelector("#payment-ref").style.background = "#f8d7da";
+        this._elementRef.nativeElement.querySelector("#payment-ref").scrollIntoView();
+        isValidInput = false;
+      } else {
+        this._elementRef.nativeElement.querySelector("#payment-ref").style.background = "white";
+      }
+    } 
     orderInfo = {
       payment_method: this.payment_mode,
       payment_method_title: this.payment_mode,
@@ -159,7 +178,11 @@ export class CheckoutPageComponent implements OnInit {
           method_title: this.shipping_type,
           total: this.shippingFeeVal.toString()
         }
-      ]
+      ],
+      meta_data: [{
+        key: "ref_no",
+        value: this.ref_number
+      }]
     };
     this._appService.cart_contents.forEach(function(cart_content){
       orderInfo.line_items.push({

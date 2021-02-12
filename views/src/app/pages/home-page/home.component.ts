@@ -10,6 +10,11 @@ import { ProductService } from '../../services/product.service';
 })
 export class HomePageComponent implements OnInit {
 
+  public carouselImages = [
+    "https://www.e-gizmo.net/oc/image/cache/catalog/0layout/homepage/banner/raspi4-800x500.jpg",
+    "https://www.e-gizmo.net/oc/image/cache/catalog/0layout/homepage/banner/raspi4-800x500.jpg",
+    "https://www.e-gizmo.net/oc/image/cache/catalog/0layout/homepage/banner/raspi4-800x500.jpg"
+  ]
   public newArrivals = [{
     itemClassificationBadge: "New Arrival",
     itemClassification: "new-arival",
