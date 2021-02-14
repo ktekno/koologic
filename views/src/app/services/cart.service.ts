@@ -12,6 +12,10 @@ export class CartService {
     return this.httpClient.get<any>("/cart/check-points");
   }
 
+  public getSf(courier: string, params: any){
+    return this.httpClient.post<any>("/cart/compute-sf/" + courier, params);
+  }
+
   public updateCart(cart_content: any){
     return this.httpClient.put<any>("/cart/update", cart_content);
   }

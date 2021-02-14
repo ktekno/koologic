@@ -6,6 +6,8 @@ import { AuthService } from '../../services/auth.service';
 import { OrderService } from '../../services/order.service';
 import { AppService } from '../../app.service'; 
 import { CartService } from '../../services/cart.service';
+import { provinces, regions } from 'ph-locations';
+import { error } from 'protractor';
 
 @Component({
   selector: 'app-checkout-page',
@@ -15,7 +17,7 @@ import { CartService } from '../../services/cart.service';
 export class CheckoutPageComponent implements OnInit {
 
   isSmallMobileDevice: boolean = false;
-  shippingFeeVal: number = 100;
+  shippingFeeVal: number = 0;
   placeholder: string = "";
   payment_mode: string = "";
   address: string = "";
@@ -29,6 +31,7 @@ export class CheckoutPageComponent implements OnInit {
   phone: string = "";
   voucherVal: number = 0;
   ref_number: string = "";
+  province_list: any = provinces;
 
   constructor(private _elementRef : ElementRef,
               private orderService: OrderService,
@@ -43,6 +46,13 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.province_list.unshift({
+      altName: null,
+      code: "PH-NCR",
+      name: "National Capital Region",
+      nameTL: "Pambansang Punong Rehiyon",
+      region: "PH-00"
+    });
     let _this = this;
     this._appService.path = "checkout";
     this.isSmallMobileDevice = window.matchMedia("(max-width: 969px)").matches
@@ -77,10 +87,71 @@ export class CheckoutPageComponent implements OnInit {
     })
     
   }
+
   changePlaceholderValue(val: string, mode: string): void{
     this.payment_mode = mode;
     this.placeholder = val;
   }
+
+  computeSf(){
+      let isValidInput = true;
+      let weight_total = 0;
+      if(this.province == ""){
+        this._elementRef.nativeElement.querySelector("#province").style.background = "#f8d7da";
+        this._elementRef.nativeElement.querySelector("#province").scrollIntoView();
+        isValidInput = false;
+      } else {
+        this._elementRef.nativeElement.querySelector("#province").style.background = "white";
+      }
+      if(this.city == ""){
+        this._elementRef.nativeElement.querySelector("#city").style.background = "#f8d7da";
+        this._elementRef.nativeElement.querySelector("#city").scrollIntoView();
+        isValidInput = false;
+      } else {
+        this._elementRef.nativeElement.querySelector("#city").style.background = "white";
+      }
+      if(this.address == ""){
+        this._elementRef.nativeElement.querySelector("#address").style.background = "#f8d7da";
+        this._elementRef.nativeElement.querySelector("#address").scrollIntoView();
+        isValidInput = false;
+      } else {
+        this._elementRef.nativeElement.querySelector("#address").style.background = "white";
+      }
+      if(!isValidInput){
+        this.shipping_type = "shipping3";
+        return;
+      }
+      console.log(this.shipping_type);
+      if(this.shipping_type == "shipping2"){
+        this._appService.cart_contents.forEach(function(cart_content){
+            weight_total += parseFloat(cart_content.weight) * parseFloat(cart_content.quantity);
+        });
+        this.spinner.show();
+        this.cartService.getSf("mr_speedy",{
+            matter:"Gadgets",
+            is_client_notification_enabled: true,
+            is_route_optimizer_enabled: true,
+            vehicle_type_id: 8,
+            total_weight_kg: weight_total,
+            points: [{
+                "address": "70 Jasmine, St. Lodora Village, Brgy Tunasan, Muntinlupa, NCR"
+            },{
+                "address": this.address + ", " + this.city + ", " + this.province
+            }]
+        }).subscribe((result: any)=>{
+          this.spinner.hide();
+          if(result.is_successful){
+            this.shippingFeeVal = parseFloat(result.order.delivery_fee_amount);
+          } else {
+            this.shipping_type = "shipping3";
+          }
+        }, error =>{
+          this.shipping_type = "shipping3";
+          this.spinner.hide();
+        });
+    }
+  }
+  
   placeOrder(): void{
     let isValidInput = true;
     let orderInfo: any = {};
@@ -190,7 +261,6 @@ export class CheckoutPageComponent implements OnInit {
         quantity: cart_content.quantity
       });
     });
-    console.log(orderInfo);
 
     if(isValidInput){
       let _this = this;
@@ -206,5 +276,4 @@ export class CheckoutPageComponent implements OnInit {
       });
     }
   }
-
 }

@@ -51,7 +51,11 @@
                     <td style="width: 100%;" class="d-flex justify-content-between">
                         <input *ngIf="!isSmallMobileDevice" id="city" class="info-input" style="width: 30%;" name="city" placeholder="City" [(ngModel)]="city">
                         <span style="width: 10%; margin-top: 10px; margin-right: 5px;">Province&nbsp;</span>
-                        <input *ngIf="!isSmallMobileDevice" id="province" class="info-input" style="width: 30%;" name="province" placeholder="Province" [(ngModel)]="province">
+                        <!-- <input *ngIf="!isSmallMobileDevice" id="province" class="info-input" style="width: 30%;" name="province" placeholder="Province" [(ngModel)]="province"> -->
+                        <select *ngIf="!isSmallMobileDevice" id="province" class="info-input" style="width: 30%;" name="province" placeholder="Province" [(ngModel)]="province">
+                            <option value=""></option>
+                            <option *ngFor="let province of province_list" value="{{ province.name }}">{{ province.name }}</option>
+                        </select>
                         <span style="margin-top: 10px; margin-right: 5px;">Zip&nbsp;</span>
                         <input *ngIf="!isSmallMobileDevice" id="zip" class="info-input"  style="width: 15%; margin-right: 0px;" name="zip" placeholder="Zip" [(ngModel)]="zip">
                     </td>
@@ -69,7 +73,11 @@
                         Province
                     </td>
                     <td>
-                        <input *ngIf="isSmallMobileDevice" id="province" class="info-input w-100" name="province" placeholder="Province" [(ngModel)]="province">
+                        <!-- <input *ngIf="isSmallMobileDevice" id="province" class="info-input w-100" name="province" placeholder="Province" [(ngModel)]="province"> -->
+                        <select *ngIf="isSmallMobileDevice" id="province" class="info-input w-100" name="province" placeholder="Province" [(ngModel)]="province">
+                            <option value=""></option>
+                            <option *ngFor="let province of province_list" value="{{ province.name }}">{{ province.name }}</option>
+                        </select>
                     </td>
                 </tr>
                 <tr class="info-input-mobile">
@@ -105,7 +113,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="radio" id="shipping2" name="shipping" value="shipping2" [(ngModel)]="shipping_type">
+                        <input type="radio" id="shipping2" name="shipping" value="shipping2" [(ngModel)]="shipping_type" (ngModelChange)="computeSf()">
                     </td>
                     <td>
                         <img src="/assets/img/voucher@2x.png" class="shipping-image">
@@ -117,12 +125,12 @@
                         For Metro Manila Customers only. Shipping rates varies per location
                     </td>
                     <td style="font-weight: bold;"> 
-                        ₱100
+                        {{ shipping_type == "shipping2"? '₱' + shippingFeeVal : 'choose to compute' }}
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <input type="radio" id="shipping3" name="shipping" value="shipping3" [(ngModel)]="shipping_type">
+                        <input type="radio" id="shipping3" name="shipping" value="shipping3" [(ngModel)]="shipping_type" [checked]="shipping_type == 'shipping3'">
                     </td>
                     <td>
                         <img src="/assets/img/voucher@2x.png" class="shipping-image">

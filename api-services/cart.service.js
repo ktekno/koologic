@@ -1,5 +1,6 @@
 const express = require("express");
 const mysql = require('mysql');
+const fetch = require('node-fetch');
 const { wooApi } = require("../config/config"); 
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr(JSON.parse(process.env.ADMIN_CRED).token);
@@ -25,10 +26,20 @@ cartApi.get("/cart/check-points", async function(req, res){
     }
 });
 
-cartApi.post("/cart/compute-sf", async function(req, res){
-    res.status(200).send({
-        
-    });
+cartApi.post("/cart/compute-sf/:courier", async function(req, res){
+    
+    let post_content = {};
+    if(req.params.courier == "mr_speedy"){
+        post_content = await (await fetch(JSON.parse(process.env.MR_SPEEDY).url + 'calculate-order', {
+            method: 'POST',
+            body:    JSON.stringify(req.body),
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-DV-Auth-Token': JSON.parse(process.env.MR_SPEEDY).api_key,
+            },
+        })).json();
+    }
+    res.status(200).send(post_content);
 });
 
 cartApi.put("/cart/update", async function(req, res){
@@ -58,7 +69,7 @@ cartApi.put("/cart/update", async function(req, res){
             } else {
                 connection = mysql.createConnection(JSON.parse(process.env.DB));
                 connection.connect();
-                connection.query('INSERT INTO wp_cart (user_id, prod_id, quantity, itemClassificationBadge, itemClassification, imgSrc, regularPrice, discountedPrice, priceBadge, titleSpecs, subSpecs, url) VALUES (' + user_id + ', ' + cart_content.prod_id + ', ' + cart_content.quantity + ', "' + cart_content.itemClassificationBadge + '", "' + cart_content.itemClassification + '", "' + cart_content.imgSrc + '", ' + cart_content.regularPrice + ', ' + cart_content.discountedPrice + ', ' + cart_content.priceBadge + ', "' + cart_content.titleSpecs + '", "' + cart_content.subSpecs +'", "' + cart_content.url + '")', function (error, new_cart_results, fields) {
+                connection.query('INSERT INTO wp_cart (user_id, prod_id, quantity, itemClassificationBadge, itemClassification, imgSrc, regularPrice, discountedPrice, priceBadge, weight, titleSpecs, subSpecs, url) VALUES (' + user_id + ', ' + cart_content.prod_id + ', ' + cart_content.quantity + ', "' + cart_content.itemClassificationBadge + '", "' + cart_content.itemClassification + '", "' + cart_content.imgSrc + '", ' + cart_content.regularPrice + ', ' + cart_content.discountedPrice + ', ' + cart_content.priceBadge + ', "' + cart_content.weight + ', "' + cart_content.titleSpecs + '", "' + cart_content.subSpecs +'", "' + cart_content.url + '")', function (error, new_cart_results, fields) {
                     if(error){
                         res.status(403).send({
                             success: false,

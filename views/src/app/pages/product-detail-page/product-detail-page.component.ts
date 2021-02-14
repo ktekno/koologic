@@ -90,6 +90,7 @@ export class ProductDetailPageComponent implements OnInit {
         priceBadge: parseFloat(prodInfo.price).toFixed(2),
         titleSpecs: prodInfo.name,
         quantity: this.quantity,
+        weight: prodInfo.weight,
         subSpecs: ``,
         url: "/product/" + this.slug
       })
