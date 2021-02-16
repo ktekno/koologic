@@ -121,7 +121,6 @@ export class CheckoutPageComponent implements OnInit {
         this.shipping_type = "shipping3";
         return;
       }
-      console.log(this.shipping_type);
       if(this.shipping_type == "shipping2"){
         this._appService.cart_contents.forEach(function(cart_content){
             weight_total += parseFloat(cart_content.weight) * parseFloat(cart_content.quantity);
@@ -151,10 +150,11 @@ export class CheckoutPageComponent implements OnInit {
         });
     }
   }
-  
+
   placeOrder(): void{
     let isValidInput = true;
     let orderInfo: any = {};
+    let total_weight = 0;
     if(!this.tosIsChecked){
       this._elementRef.nativeElement.querySelector("#tos-table").style.border = "2px solid red";
       this._elementRef.nativeElement.querySelector("#tos-table").scrollIntoView();
@@ -246,7 +246,7 @@ export class CheckoutPageComponent implements OnInit {
       shipping_lines: [
         {
           method_id: this.shipping_type,
-          method_title: this.shipping_type,
+          method_title: this.shipping_type == "shipping2"? "mr_speedy" : "standard",
           total: this.shippingFeeVal.toString()
         }
       ],
@@ -260,7 +260,12 @@ export class CheckoutPageComponent implements OnInit {
         product_id: cart_content.prod_id,
         quantity: cart_content.quantity
       });
+      total_weight += (parseFloat(cart_content.quantity)*cart_content.weight);
     });
+    orderInfo.meta_data.push({
+      key: "weight",
+      value: total_weight
+    })
 
     if(isValidInput){
       let _this = this;

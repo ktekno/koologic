@@ -52,6 +52,22 @@
                         {{ status }}
                     </td>
                 </tr>
+                <tr *ngIf="shipping_lines.length > 0" style="border-bottom: 0;">
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; width: 50%;">
+                        Courier：
+                    </td>
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; ">
+                        {{ shipping_lines[0].method_title }}
+                    </td>
+                </tr>
+                <tr *ngIf="shipping_info.length > 0" style="border-bottom: 0;">
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; width: 50%;">
+                        Courier Status：
+                    </td>
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; ">
+                        {{ shipping_info.orders[0].status }}
+                    </td>
+                </tr>
             </tbody>
         </table>
         <table id="cart-table" class="order-table mt-2" data-mobile-responsive="true">

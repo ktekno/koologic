@@ -26,6 +26,8 @@ export class OrderDetailsPageComponent implements OnInit {
   items: any = [];
   partial_total: number = 0;
   total_price: string = "";
+  shipping_lines: any = "";
+  shipping_info: any = "";
   constructor(
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
@@ -38,6 +40,8 @@ export class OrderDetailsPageComponent implements OnInit {
     
     this.spinner.show();
     this.orderService.getOrder(this.id).subscribe((orderInfo: any)=>{
+      _this.shipping_lines = orderInfo.order_detail.shipping_lines;
+      _this.shipping_info = typeof orderInfo.order_detail.shipping_info != "undefined"? orderInfo.order_detail.shipping_info : [];
       _this.first_name = orderInfo.order_detail.billing.first_name;
       _this.last_name = orderInfo.order_detail.billing.last_name;
       _this.address = orderInfo.order_detail.billing.address_1 + " " + orderInfo.order_detail.billing.city + " " + orderInfo.order_detail.billing.state+ " " + orderInfo.order_detail.billing.postcode;

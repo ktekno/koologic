@@ -1,5 +1,6 @@
 const express = require("express");
 const { wooApi } = require("../config/config"); 
+const fetch = require('node-fetch');
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr(JSON.parse(process.env.ADMIN_CRED).token);
 const nodemailer = require("nodemailer");
@@ -11,7 +12,18 @@ const orderApi = express.Router();
 orderApi.get("/order/:id", async function(req, res){
     try{
         let orderInfo = (await wooApi.get("orders/" + req.params.id)).data;
-        let products = (await wooApi.get("products?include=" + orderInfo.line_items.map(e => e.product_id).join(",") + "&_fields=id,slug,images,sale_price,regular_price")).data 
+        let products = (await wooApi.get("products?include=" + orderInfo.line_items.map(e => e.product_id).join(",") + "&_fields=id,slug,images,sale_price,regular_price")).data;
+        let shipment_tracking_index = orderInfo.meta_data.findIndex(r => r.key == "shipment_tracking");
+        let shipment_tracking = shipment_tracking_index > -1? orderInfo.meta_data[shipment_tracking_index].value : '';
+        if(orderInfo.shipping_lines[0].method_title == "mr_speedy"){
+            orderInfo.shipping_info =  await (await fetch(JSON.parse(process.env.MR_SPEEDY).url + 'orders?order_id='+shipment_tracking, {
+                method: 'GET',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-DV-Auth-Token': JSON.parse(process.env.MR_SPEEDY).api_key,
+                }
+            })).json(); 
+        }
         orderInfo.line_items.forEach(function(line_item, index){
             let prod_index = products.findIndex(r => r.id == line_item.product_id);
             orderInfo.line_items[index].slug = products[prod_index].slug;
@@ -58,6 +70,8 @@ orderApi.post("/order/new", async function(req, res){
         let customerInfo = (await wooApi.get("customers/" +cryptr.decrypt(req.cookies.user_id))).data;
         let total_price = JSON.parse(req.cookies.cart_contents).reduce(function(prev, cur) {return parseFloat(prev) + parseFloat(cur.priceBadge);}, 0)
         let customerMetaIndex = customerInfo.meta_data.findIndex(r => r.key == "points");
+        let delivery_info = {};
+        let order_id = {};
         req.body.customer_id = cryptr.decrypt(req.cookies.user_id);
         req.body.billing.first_name = customerInfo.first_name;
         req.body.billing.last_name = customerInfo.last_name;
@@ -78,11 +92,51 @@ orderApi.post("/order/new", async function(req, res){
                 code: "KL" + parseFloat(req.cookies.points)
             }]
         }
+        order_id = (await wooApi.post("orders", req.body)).data.id;
+        if(req.body.shipping_lines[0].method_title == "mr_speedy"){
+            delivery_info = await (await fetch(JSON.parse(process.env.MR_SPEEDY).url + 'create-order', {
+                method: 'POST',
+                body:    JSON.stringify({
+                    matter:"Gadgets",
+                    is_client_notification_enabled: true,
+                    is_route_optimizer_enabled: true,
+                    vehicle_type_id: 8,
+                    total_weight_kg: req.body.meta_data[req.body.meta_data.findIndex(r => r.key == "weight")].value,
+                    points:[{
+                       address:"70 Jasmine, St. Lodora Village, Brgy Tunasan, Muntinlupa, NCR",
+                        contact_person: { 
+                            name: "Kydo Solis",
+                            phone: "09054302834"
+                        },
+                        client_order_id: order_id
+                    },{
+                        address: req.body.shipping.address_1 + ", " + req.body.shipping.city + ", " + req.body.shipping.state,
+                        contact_person: { 
+                            name: req.body.shipping.first_name + " " + req.body.shipping.last_name,
+                            phone: req.body.shipping.phone
+                        },
+                        client_order_id: order_id
+                    }]
+                }),
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-DV-Auth-Token': JSON.parse(process.env.MR_SPEEDY).api_key,
+                },
+                credentials: "include"
+            })).json();
+            order_id = (await wooApi.put("orders/" + order_id, {
+                meta_data: [{
+                    key: "shipment_tracking",
+                    value:  delivery_info.order.order_id
+                }]
+            })).data.id;
+            order_id = order_id;
+        }
         res.clearCookie('cart_contents');
         res.clearCookie('points');
         res.status(200).send({
             success: true,
-            order_id: (await wooApi.post("orders", req.body)).data.id
+            order_id: order_id
         });
     } catch (e){
         console.log(e);

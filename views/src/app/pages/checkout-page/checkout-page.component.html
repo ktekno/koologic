@@ -49,15 +49,15 @@
                         City
                     </td>
                     <td style="width: 100%;" class="d-flex justify-content-between">
-                        <input *ngIf="!isSmallMobileDevice" id="city" class="info-input" style="width: 30%;" name="city" placeholder="City" [(ngModel)]="city">
+                        <input *ngIf="!isSmallMobileDevice" id="city" class="info-input" style="width: 30%;" name="city" placeholder="City" [(ngModel)]="city" (focusout)="computeSf()">
                         <span style="width: 10%; margin-top: 10px; margin-right: 5px;">Province&nbsp;</span>
                         <!-- <input *ngIf="!isSmallMobileDevice" id="province" class="info-input" style="width: 30%;" name="province" placeholder="Province" [(ngModel)]="province"> -->
-                        <select *ngIf="!isSmallMobileDevice" id="province" class="info-input" style="width: 30%;" name="province" placeholder="Province" [(ngModel)]="province">
+                        <select *ngIf="!isSmallMobileDevice" id="province" class="info-input" style="width: 30%;" name="province" placeholder="Province" [(ngModel)]="province" (focusout)="computeSf()">
                             <option value=""></option>
                             <option *ngFor="let province of province_list" value="{{ province.name }}">{{ province.name }}</option>
                         </select>
                         <span style="margin-top: 10px; margin-right: 5px;">Zip&nbsp;</span>
-                        <input *ngIf="!isSmallMobileDevice" id="zip" class="info-input"  style="width: 15%; margin-right: 0px;" name="zip" placeholder="Zip" [(ngModel)]="zip">
+                        <input *ngIf="!isSmallMobileDevice" id="zip" class="info-input"  style="width: 15%; margin-right: 0px;" name="zip" placeholder="Zip" [(ngModel)]="zip" (focusout)="computeSf()">
                     </td>
                 </tr>
                 <tr class="info-input-mobile">
@@ -65,7 +65,7 @@
                         City
                     </td>
                     <td>
-                        <input *ngIf="isSmallMobileDevice" id="city" class="info-input w-100" name="city" placeholder="City" [(ngModel)]="city">
+                        <input *ngIf="isSmallMobileDevice" id="city" class="info-input w-100" name="city" placeholder="City" [(ngModel)]="city" (focusout)="computeSf()">
                     </td>
                 </tr>
                 <tr class="info-input-mobile">
