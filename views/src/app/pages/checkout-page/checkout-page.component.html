@@ -99,16 +99,16 @@
                         <input type="radio" id="shipping1" name="shipping" value="shipping1" [(ngModel)]="shipping_type">
                     </td>
                     <td>
-                        <img src="/assets/img/voucher@2x.png" class="shipping-image">
+                        <img src="/assets/img/lalamove.png" class="shipping-image">
                     </td>
                     <td style="font-weight: bold;">
-                        Standard Delivery
+                        Lalamove
                     </td>
                     <td *ngIf="isSmallMobileDevice == false" style="width: 55%;">
                         Shipping rates varies per location
                     </td>
                     <td style="font-weight: bold;"> 
-                        ₱100
+                        {{ shipping_type == "shipping1"? '₱' + shippingFeeVal : 'choose to compute' }}
                     </td>
                 </tr>
                 <tr>
@@ -116,13 +116,13 @@
                         <input type="radio" id="shipping2" name="shipping" value="shipping2" [(ngModel)]="shipping_type" (ngModelChange)="computeSf()">
                     </td>
                     <td>
-                        <img src="/assets/img/voucher@2x.png" class="shipping-image">
+                        <img src="/assets/img/mr_speedy.png" class="shipping-image">
                     </td>
                     <td style="font-weight: bold;">
-                        Same day delivery
+                        Mr Speedy
                     </td>
                     <td *ngIf="isSmallMobileDevice == false" style="width: 55%;">
-                        For Metro Manila Customers only. Shipping rates varies per location
+                        Shipping rates varies per location
                     </td>
                     <td style="font-weight: bold;"> 
                         {{ shipping_type == "shipping2"? '₱' + shippingFeeVal : 'choose to compute' }}
@@ -133,7 +133,7 @@
                         <input type="radio" id="shipping3" name="shipping" value="shipping3" [(ngModel)]="shipping_type" [checked]="shipping_type == 'shipping3'">
                     </td>
                     <td>
-                        <img src="/assets/img/voucher@2x.png" class="shipping-image">
+                        <img src="/assets/img/meetup.png" class="shipping-image">
                     </td>
                     <td style="font-weight: bold;">
                         In store pickup/Meet up nearby

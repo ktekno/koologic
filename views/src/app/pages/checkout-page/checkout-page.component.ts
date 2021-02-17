@@ -246,7 +246,7 @@ export class CheckoutPageComponent implements OnInit {
       shipping_lines: [
         {
           method_id: this.shipping_type,
-          method_title: this.shipping_type == "shipping2"? "mr_speedy" : "standard",
+          method_title: this.shipping_type == "shipping2"? "Mr Speedy" : this.shipping_type == "shipping1"? "Lalamove" : "Meetup",
           total: this.shippingFeeVal.toString()
         }
       ],

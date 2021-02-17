@@ -24,7 +24,6 @@
     "node-phpass": "^1.0.5",
     "nodemailer": "^6.4.17",
     "path": "^0.12.7",
-    "protonmail-api": "^2.1.0",
     "redis": "^3.0.2",
     "redis-server": "^1.2.2"
   }
