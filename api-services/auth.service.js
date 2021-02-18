@@ -4,10 +4,12 @@ const express = require("express");
 const { wooApi } = require("../config/config");
 const { redis, JWTR, redisClient, jwtr, checkToken, sessionstorage } = require('../helpers/authenticator.helper');
 const { PasswordHash } = require('node-phpass');
+const fs = require('fs');
+const path = require("path");
 const mysql = require('mysql');
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr(JSON.parse(process.env.ADMIN_CRED).token);
-const nodemailer = require("nodemailer");
+const { sendEmail } = require('../helpers/mailer.helper');  
 const cryptoRandomString = require('crypto-random-string');
 
 const authApi = express.Router();
@@ -124,6 +126,9 @@ authApi.post("/auth", async function(req, res){
 authApi.post('/auth/new', async function (req, res) {
     try{
         let response = await wooApi.post("customers", req.body);
+        let email_template = fs.readFileSync(path.join(__dirname, '../helpers/email-templates', 'account-registration.html'), 'utf8');
+        email_template = email_template.replace("[FIRST_NAME] [LAST_NAME]", req.body.first_name + " " + req.body.last_name);
+        sendEmail(req.body.email,"Welcome to Koologic", email_template);
         res.status(200).send(response.data);
     } catch(e){
         console.log(e);
@@ -224,26 +229,6 @@ authApi.post('/auth/isAuthenticated', async function (req, res) {
 
 authApi.post('/verify-email', async function (req, res) {
     try{
-        // let transporter = nodemailer.createTransport({
-        //     host: "127.0.0.1",
-        //     port: 1025,
-        //     secure: false, // true for 465, false for other ports
-        //     auth: {
-        //       user: "kdvsolis@protonmail.com", 
-        //       pass: "`1Kgaiden`"
-        //     }, 
-        //     tls: {
-        //         rejectUnauthorized: false
-        //     }
-        //   });
-    
-        // let info = await transporter.sendMail({
-        //   from: '"Me" <johnnycash@protonmail.com>',
-        //   to: "wixevab330@200cai.com",
-        //   subject: "Hello!",
-        //   text: "Hello world?",
-        //   html: "<b>Hello world?</b>"
-        // });
         let customer = await wooApi.get("customers?email=" + req.body.email);
         if(customer.data.length == 1){
             let temp_password = cryptoRandomString({length: 10, type: 'base64'});console.log(temp_password);
