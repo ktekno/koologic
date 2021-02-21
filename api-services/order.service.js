@@ -5,7 +5,6 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require("path");
 const Cryptr = require('cryptr');
-const { parse } = require("path");
 const cryptr = new Cryptr(JSON.parse(process.env.ADMIN_CRED).token);
 
 
@@ -34,6 +33,7 @@ orderApi.get("/order/:id", async function(req, res){
             orderInfo.line_items[index].regular_price = products[prod_index].regular_price;
             orderInfo.line_items[index].sale_price = products[prod_index].sale_price;
         });
+
         if(orderInfo.customer_id == cryptr.decrypt(req.cookies.user_id)){
             res.status(200).send({
                 success: true,
@@ -266,7 +266,7 @@ orderApi.post("/order/new", async function(req, res){
         email_template = email_template.replace("[ORDER NUMBER]", order_id);
         email_template = email_template.replace("[ORDER NUMBER]", order_id);
         email_template = email_template.replace("[DELIVERY ADDRESS]", order_data.shipping.address_1 + ", " + order_data.shipping.city + ", " + order_data.shipping.state + ", " + order_data.shipping.postcode);
-        sendEmail("kdvsolis@protonmail.com","Order #" + order_id, email_template);
+        sendEmail(customerInfo.email,"Order #" + order_id, email_template);
 
         res.clearCookie('cart_contents');
         res.clearCookie('points');
@@ -297,11 +297,28 @@ orderApi.get("/order/complete/:order_id", async function(req, res){
 
 orderApi.get("/order/cancel/:order_id", async function(req, res){
     try{
+        let order_info = (await wooApi.put("orders/" + req.params.order_id, {
+            status: 'cancelled'
+        })).data;
+        let shipment_tracking_index = order_info.meta_data.findIndex(r => r.key == "shipment_tracking");
+        let shipment_tracking = shipment_tracking_index > -1? order_info.meta_data[shipment_tracking_index].value : "";
+        console.log(shipment_tracking);
+        if(shipment_tracking != ""){
+            await (await fetch(JSON.parse(process.env.MR_SPEEDY).url + 'cancel-order', {
+                method: 'POST',
+                body: JSON.stringify({
+                    order_id: shipment_tracking
+                }),
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-DV-Auth-Token': JSON.parse(process.env.MR_SPEEDY).api_key,
+                },
+                credentials: "include"
+            })).json();
+        }
         res.status(200).send({
             success: true,
-            order_info: (await wooApi.put("orders/" + req.params.order_id, {
-                status: 'cancelled'
-            })).data
+            order_info: order_info 
         });
     } catch (e){
         console.log(e);

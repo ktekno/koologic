@@ -60,7 +60,15 @@
                         {{ shipping_lines[0].method_title }}
                     </td>
                 </tr>
-                <tr *ngIf="shipping_info.length > 0" style="border-bottom: 0;">
+                <tr *ngIf="shipping_lines.length > 0" style="border-bottom: 0;">
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; width: 50%;">
+                        Courier Tracking：
+                    </td>
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; ">
+                        {{ shipping_info.orders[0].order_id }}
+                    </td>
+                </tr>
+                <tr *ngIf="shipping_lines.length > 0" style="border-bottom: 0;">
                     <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; width: 50%;">
                         Courier Status：
                     </td>
@@ -104,7 +112,10 @@
                </tr>
             </tbody>
          </table>
-         <button class="continueshopping">Continue Shopping</button>
+         <div class="d-flex justify-content-between">
+            <button class="continueshopping" onclick="location.href='/home'">Continue Shopping</button>
+            <!-- <button class="continueshopping" style="background-color: red !important; color: white !important;" (click)="cancelOrder()">Cancel Order</button> -->
+         </div>
     </div>
     <div class="spacer"></div>
     <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-spin" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>

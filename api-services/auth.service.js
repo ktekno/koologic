@@ -20,7 +20,7 @@ authApi.post("/auth", async function(req, res){
     let connection = mysql.createConnection(JSON.parse(process.env.DB));
     connection.connect();
     connection.query(`SELECT id, user_pass FROM wp_users WHERE user_email = "` + req.body.username + `"`, function (error, results, fields) {
-        if (error) throw error;
+        if (error) {throw error;}
         if(results.length > 0){
             try{
                 if(hasher.CheckPassword(req.body.password, results[0].user_pass)) {
@@ -70,7 +70,7 @@ authApi.post("/auth", async function(req, res){
                                                 }
                                                 cart_results.push(cart_content);
                                                 if(count == cart_contents.length){
-                                                    res.cookie('cart_contents', JSON.stringify(cart_contents));
+                                                    res.cookie('cart_contents', JSON.stringify(cart_results));
                                                     res.status(200).send({
                                                         success: true,
                                                         message: "Auth Success!",
@@ -232,10 +232,13 @@ authApi.post('/verify-email', async function (req, res) {
         let customer = await wooApi.get("customers?email=" + req.body.email);
         if(customer.data.length == 1){
             let temp_password = cryptoRandomString({length: 10, type: 'base64'});console.log(temp_password);
+            let email_template = fs.readFileSync(path.join(__dirname, '../helpers/email-templates', 'account-password.html'), 'utf8');
+            email_template = email_template.replace("[FIRST_NAME] [LAST_NAME]", customer.data[0].first_name + " " + customer.data[0].last_name);
+            email_template = email_template.replace("[NEW PASSWORD]", temp_password);
+            sendEmail(req.body.email, "Notice for account modification", email_template);
             await wooApi.put("customers/" + customer.data[0].id, {password: temp_password});
             res.status(200).send({ success: true });
         } else {
-            
             res.status(200).send({ success: false});
         }
 

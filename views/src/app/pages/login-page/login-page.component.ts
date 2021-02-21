@@ -43,11 +43,14 @@ export class LoginPageComponent implements OnInit {
   }
 
   login(){
+    this.invalid = false;
+    this.spinner.show();
     this.authService.authenticateUser(this.username, this.password).subscribe((credInfo: any)=>{
       this.cookieService.put("token", credInfo.token);
       this.cookieService.put("user_id", credInfo.user_id);
       this.cookieService.putObject("cart_contents", credInfo.cart_contents);
       this._appService.refreshCart();
+      this.spinner.hide();
       //this.router.navigate(['user-info']);
       this.route.queryParams.subscribe(params => {
         this.invalid = false;
@@ -59,6 +62,7 @@ export class LoginPageComponent implements OnInit {
             window.location.href = "/user-info";
       });
     }, (error) => {
+      this.spinner.hide();
       this.cookieService.remove("token");
       this.cookieService.remove("user_id");
       console.log(error.error);

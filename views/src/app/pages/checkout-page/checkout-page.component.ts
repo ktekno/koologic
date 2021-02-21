@@ -46,6 +46,10 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    if(this._appService.cart_contents.length == 0){
+      this.router.navigate(['cart/']);
+    }
     this.province_list.unshift({
       altName: null,
       code: "PH-NCR",

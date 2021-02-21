@@ -61,4 +61,8 @@ export class OrderDetailsPageComponent implements OnInit {
     });
   }
 
+  cancelOrder(){
+    
+  }
+
 }
