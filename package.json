@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd views && ng build && cd ../ && node server.js",
-    "build": "cd views && ng build && cd ../"
+    "start": "cd views && ng build --prod && cd ../ && node server.js",
+    "build": "cd views && ng build --prod && cd ../"
   },
   "author": "",
   "license": "ISC",
