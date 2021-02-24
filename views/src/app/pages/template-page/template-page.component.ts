@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router, ActivatedRoute} from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BlogService } from '../../services/blog.service';
 
 @Component({
   selector: 'app-template-page',
   templateUrl: './template-page.component.html',
-  styleUrls: ['./template-page.component.css']
+  styleUrls: ['./template-page.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class TemplatePageComponent implements OnInit {
 

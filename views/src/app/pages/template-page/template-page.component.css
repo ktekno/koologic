@@ -10,9 +10,23 @@
 .spacer{
     height: 30px;
 }
-
-
+.wp-block-image img{
+    display: block;
+    margin: auto;
+}
 @media screen and (max-width: 720px) {
+    .template-page{
+        width: 100%;
+    }
+    .wp-block-image{
+        width: 100vw !important;
+    }
+    
+    .wp-block-image img{
+        width: 90% !important;
+        height: 90% !important;
+    }
+
     .template-page-content{
         padding: 20px 30px 20px 30px;
     }
