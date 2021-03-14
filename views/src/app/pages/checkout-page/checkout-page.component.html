@@ -94,7 +94,7 @@
         <button type="button" class="info-toggler mt-3" data-toggle="collapse" data-target="#shipping-info-holder">✔️ Select Shipping Method <i class="fa font-accordion">&#xf078;</i></button>
         <div id="shipping-info-holder" class="collapse show">
             <table class="info-table" id="shipping-choice-table">
-                <tr>
+                <!-- <tr>
                     <td>
                         <input type="radio" id="shipping1" name="shipping" value="shipping1" [(ngModel)]="shipping_type">
                     </td>
@@ -110,7 +110,7 @@
                     <td style="font-weight: bold;"> 
                         {{ shipping_type == "shipping1"? '₱' + shippingFeeVal : 'choose to compute' }}
                     </td>
-                </tr>
+                </tr> -->
                 <tr>
                     <td>
                         <input type="radio" id="shipping2" name="shipping" value="shipping2" [(ngModel)]="shipping_type" (ngModelChange)="computeSf()">
