@@ -139,13 +139,18 @@
                         In store pickup
                     </td>
                     <td *ngIf="isSmallMobileDevice == false" style="width: 55%;">
-                        Drop-off to our store to pick up the item.
+                        Drop-off to our store to pick up the item. You may also leave a note in the memo area for your preferred schedule of pickup.
                     </td>
                     <td style="font-weight: bold;"> 
                         ₱0
                     </td>
                 </tr>
             </table>
+        </div>
+        <div class="line-divider"></div>
+        <button type="button" class="info-toggler mt-3" data-toggle="collapse" data-target="#address-info-holder">✔️ Memo <i class="fa font-accordion">&#xf078;</i></button>
+        <div id="memo-holder" class="collapse show">
+            <textarea id="memo" name="memo" rows="4" cols="50" class="info-input w-100 mt-2" [(ngModel)]="memo"></textarea>
         </div>
         <div class="line-divider"></div>
         <button type="button" class="info-toggler mt-3" data-toggle="collapse" data-target="#payment-info-holder">✔️ Select Payment Method <i class="fa font-accordion">&#xf078;</i></button>
@@ -155,7 +160,7 @@
                     <input type="checkbox" id="tos-agree" name="tos-agree" value="tos-agree" style="margin-left: 10px;"  [(ngModel)]="tosIsChecked" >
                 </td>
                 <td style="font-weight: bold;">
-                    I agree to the terms and service and will adhere unconditionally
+                    I agree to the <a href="/terms-and-conditions">terms and condition</a> and will adhere unconditionally
                 </td>
             </tr>
         </table>

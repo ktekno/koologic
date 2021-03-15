@@ -31,7 +31,8 @@ export class CheckoutPageComponent implements OnInit {
   phone: string = "";
   voucherVal: number = 0;
   ref_number: string = "";
-  province_list: any = provinces;
+  memo: string = "";
+  province_list: any = [];//provinces;
 
   constructor(private _elementRef : ElementRef,
               private orderService: OrderService,
@@ -50,13 +51,31 @@ export class CheckoutPageComponent implements OnInit {
     if(this._appService.cart_contents.length == 0){
       this.router.navigate(['cart/']);
     }
-    this.province_list.unshift({
+    this.province_list = [{
       altName: null,
       code: "PH-NCR",
       name: "National Capital Region",
       nameTL: "Pambansang Punong Rehiyon",
       region: "PH-00"
-    });
+    }, {
+      altName: null,
+      code: "PH-CAV",
+      name: "Cavite",
+      nameTL: "Kabite",
+      region: "PH-40"
+    }, {
+      altName: null,
+      code: "PH-LAG",
+      name: "Laguna",
+      nameTL: "Laguna",
+      region: "PH-40"
+    }, {
+      altName: null,
+      code: "PH-RIZ",
+      name: "Rizal",
+      nameTL: "Rizal",
+      region: "PH-40"
+    }];
     let _this = this;
     this._appService.path = "checkout";
     this.isSmallMobileDevice = window.matchMedia("(max-width: 969px)").matches
@@ -257,6 +276,9 @@ export class CheckoutPageComponent implements OnInit {
       meta_data: [{
         key: "ref_no",
         value: this.ref_number
+      },{
+        key: "memo",
+        value: this.memo
       }]
     };
     this._appService.cart_contents.forEach(function(cart_content){
@@ -269,7 +291,7 @@ export class CheckoutPageComponent implements OnInit {
     orderInfo.meta_data.push({
       key: "weight",
       value: total_weight
-    })
+    });
 
     if(isValidInput){
       let _this = this;

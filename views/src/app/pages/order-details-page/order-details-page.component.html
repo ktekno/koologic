@@ -57,23 +57,31 @@
                         Courier：
                     </td>
                     <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; ">
-                        {{ shipping_lines[0].method_title }}
+                        {{ shipping_lines.length > 0? shipping_lines[0].method_title : ''}}
                     </td>
                 </tr>
-                <tr *ngIf="shipping_lines.length > 0" style="border-bottom: 0;">
+                <tr *ngIf="shipping_lines.length > 0 && shipping_lines[0].method_title != 'Meetup'" style="border-bottom: 0;">
                     <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; width: 50%;">
                         Courier Tracking：
                     </td>
                     <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; ">
-                        {{ shipping_info.orders[0].order_id }}
+                        {{ shipping_lines[0].method_title != 'Meetup'? shipping_info.orders[0].order_id : '' }}
                     </td>
                 </tr>
-                <tr *ngIf="shipping_lines.length > 0" style="border-bottom: 0;">
+                <tr *ngIf="shipping_lines.length > 0 && shipping_lines[0].method_title != 'Meetup'" style="border-bottom: 0;">
                     <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; width: 50%;">
                         Courier Status：
                     </td>
                     <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; ">
-                        {{ shipping_info.orders[0].status }}
+                        {{ shipping_lines[0].method_title != 'Meetup'? shipping_info.orders[0].status : '' }}
+                    </td>
+                </tr>
+                <tr style="border-bottom: 0;">
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; width: 50%;">
+                        Customer's note：
+                    </td>
+                    <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; ">
+                        {{ memo }}
                     </td>
                 </tr>
             </tbody>

@@ -165,7 +165,10 @@ ngx-number-spinner button{
         height: 70px !important;
     } */
 }
-
+.shop-icons{
+    width: 30px;
+    margin-right: 5px;
+}
 
 @media screen and (max-width: 412px) {
     #pills-pd-tab.nav-link {

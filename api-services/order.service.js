@@ -17,6 +17,7 @@ orderApi.get("/order/:id", async function(req, res){
         let products = (await wooApi.get("products?include=" + orderInfo.line_items.map(e => e.product_id).join(",") + "&_fields=id,slug,images,sale_price,regular_price")).data;
         let shipment_tracking_index = orderInfo.meta_data.findIndex(r => r.key == "shipment_tracking");
         let shipment_tracking = shipment_tracking_index > -1? orderInfo.meta_data[shipment_tracking_index].value : '';
+        let memo_index = orderInfo.meta_data.findIndex(r => r.key == 'memo');
         if(orderInfo.shipping_lines[0].method_title == "mr_speedy"){
             orderInfo.shipping_info =  await (await fetch(JSON.parse(process.env.MR_SPEEDY).url + 'orders?order_id='+shipment_tracking, {
                 method: 'GET',
@@ -33,7 +34,7 @@ orderApi.get("/order/:id", async function(req, res){
             orderInfo.line_items[index].regular_price = products[prod_index].regular_price;
             orderInfo.line_items[index].sale_price = products[prod_index].sale_price;
         });
-
+        orderInfo.memo = memo_index > -1? orderInfo.meta_data[memo_index].value : '';
         if(orderInfo.customer_id == cryptr.decrypt(req.cookies.user_id)){
             res.status(200).send({
                 success: true,

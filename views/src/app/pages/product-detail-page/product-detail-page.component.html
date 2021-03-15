@@ -55,7 +55,11 @@
             </div>
             <div class="d-flex justify-content-start">
                 <button class="btn-add" style="background-color: #0ca6ea; color: white; margin-right: 10px !important;" (click)="addToCart()">Add To Cart</button>
-                <button class="btn-add" style="background-color: #fcaf43;">Add To Wishlist</button>
+            </div>
+            <span>Outside Metro Manila? You can order from our external shops:</span>
+            <div class="d-flex justify-content-start">
+                <button class="btn-add" style="background-color: #ee4d2d; color: white; margin-right: 10px !important;" (click)="goToShop('shopee')"><img src="assets/img/Shopee.png" class="shop-icons">Shopee</button>
+                <button class="btn-add" style="background-color: #fcaf43; color: white;" (click)="goToShop('lazada')"><img src="assets/img/Lazada.png" class="shop-icons">Lazada</button>
             </div>
         </div> <!-- /col-sm-6 -->
           

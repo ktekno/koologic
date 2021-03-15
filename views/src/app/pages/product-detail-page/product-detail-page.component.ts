@@ -126,4 +126,12 @@ export class ProductDetailPageComponent implements OnInit {
     this.quantity = value;
   }
 
+  goToShop(shop: string){
+    if(shop == "shopee"){
+      window.open("https://shopee.ph/kdvsolis");
+    } else {
+      window.open("https://www.lazada.com.ph/shop/kydo/");
+    }
+  }
+
 }

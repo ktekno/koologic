@@ -28,6 +28,8 @@ export class OrderDetailsPageComponent implements OnInit {
   total_price: string = "";
   shipping_lines: any = "";
   shipping_info: any = "";
+  memo: any = "";
+
   constructor(
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
@@ -54,6 +56,7 @@ export class OrderDetailsPageComponent implements OnInit {
       _this.items = orderInfo.order_detail.line_items;
       _this.partial_total = parseInt(orderInfo.order_detail.total) - _this.shippingFeeVal;
       _this.total_price = orderInfo.order_detail.total;
+      _this.memo = orderInfo.order_detail.memo;
       
       this.spinner.hide();
     }, (error: any) => {
