@@ -274,8 +274,8 @@ orderApi.post("/order/new", async function(req, res){
             email_template = email_template.replace("[ORDER NUMBER]", order_id);
             email_template = email_template.replace("[DELIVERY ADDRESS]", order_data.shipping.address_1 + ", " + order_data.shipping.city + ", " + order_data.shipping.state + ", " + order_data.shipping.postcode);
             sendEmail(customerInfo.email,"Order #" + order_id, email_template);
-            sendEmail('kdvsolis@protonmail.com',"Validate" + order_id, "<a href='http://koologic-ph.com/order/approve/" + order_id + "'>Confirm order</a><br><a href='http://koologic-ph.com/order/cancel/" + order_id + "'>Cancel order</a>");
         }
+        sendEmail('kdvsolis@protonmail.com',"Validate" + order_id, "<a href='http://koologic-ph.com/order/approve/" + order_id + "'>Confirm order</a><br><a href='http://koologic-ph.com/order/cancel/" + order_id + "'>Cancel order</a>");
         res.clearCookie('cart_contents');
         res.clearCookie('points');
         res.status(200).send({
