@@ -52,7 +52,7 @@
                         {{ status }}
                     </td>
                 </tr>
-                <tr *ngIf="shipping_lines.length > 0" style="border-bottom: 0;">
+                <tr *ngIf="shipping_lines.length > 0 && shipping_info.length > 0" style="border-bottom: 0;">
                     <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; width: 50%;">
                         Courier：
                     </td>
@@ -60,7 +60,7 @@
                         {{ shipping_lines.length > 0? shipping_lines[0].method_title : ''}}
                     </td>
                 </tr>
-                <tr *ngIf="shipping_lines.length > 0 && shipping_lines[0].method_title != 'Meetup'" style="border-bottom: 0;">
+                <tr *ngIf="shipping_lines.length > 0 && shipping_info.length > 0 && shipping_lines[0].method_title != 'Meetup'" style="border-bottom: 0;">
                     <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; width: 50%;">
                         Courier Tracking：
                     </td>
@@ -68,12 +68,12 @@
                         {{ shipping_lines[0].method_title != 'Meetup'? shipping_info.orders[0].order_id : '' }}
                     </td>
                 </tr>
-                <tr *ngIf="shipping_lines.length > 0 && shipping_lines[0].method_title != 'Meetup'" style="border-bottom: 0;">
+                <tr *ngIf="shipping_lines.length > 0 && shipping_info.length > 0 && shipping_lines[0].method_title != 'Meetup'" style="border-bottom: 0;">
                     <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; width: 50%;">
                         Courier Status：
                     </td>
                     <td colspan="2" style="padding: 0px 10px 0px 10px; background-color: #ebebeb; ">
-                        {{ shipping_lines[0].method_title != 'Meetup'? shipping_info.orders[0].status : '' }}
+                        {{ shipping_lines[0].method_title != 'Meetup' && shipping_info.length > 0? shipping_info.orders[0].status : '' }}
                     </td>
                 </tr>
                 <tr style="border-bottom: 0;">
@@ -122,7 +122,7 @@
          </table>
          <div class="d-flex justify-content-between">
             <button class="continueshopping" onclick="location.href='/home'">Continue Shopping</button>
-            <!-- <button class="continueshopping" style="background-color: red !important; color: white !important;" (click)="cancelOrder()">Cancel Order</button> -->
+            <!-- <button class="continueshopping" style="background-color: red !important; color: white !important;" (click)="cancelOrder()" [disabled]="status=='cancelled'">Cancel Order</button> -->
          </div>
     </div>
     <div class="spacer"></div>

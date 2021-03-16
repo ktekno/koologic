@@ -65,6 +65,13 @@ export class OrderDetailsPageComponent implements OnInit {
   }
 
   cancelOrder(){
+    this.spinner.show();
+    this.orderService.cancelOrder(this.id).subscribe((orderInfo: any)=>{
+      this.status = 'cancelled';
+      this.spinner.hide();
+    }, (error: any) => {
+      console.log(error);
+    });
     
   }
 

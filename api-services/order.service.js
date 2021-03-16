@@ -61,7 +61,12 @@ orderApi.get("/order-list/:page", async function(req, res){
                 total_pages: orderList.headers["x-wp-totalpages"]
             });
         } else {
-            res.status(403).send("Not authorized")
+            res.status(200).send({
+                success: true,
+                order_detail: [],
+                total_orders: 0,
+                total_pages: 0
+            });
         }
     } catch (e){
         console.log(e);
@@ -138,137 +143,139 @@ orderApi.post("/order/new", async function(req, res){
             })).data.id;
             order_id = order_id;
         }
-        let email_template = fs.readFileSync(path.join(__dirname, '../helpers/email-templates', 'order-receipt.html'), 'utf8');
-        let item_template = '';
-        order_data.line_items.forEach(function(line_item){
+        if(order_data.payment_method == 'cod'){
+            let email_template = fs.readFileSync(path.join(__dirname, '../helpers/email-templates', 'order-receipt.html'), 'utf8');
+            let item_template = '';
+            order_data.line_items.forEach(function(line_item){
+                item_template += `<div class="u-row-container" style="padding: 0px;background-color: transparent">
+                <div class="u-row no-stack" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #ffffff;">
+                <div style="border-collapse: collapse;display: table;width: 100%;background-color: transparent;">
+                    <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
+                        <div style="width: 100% !important;">
+                            <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
+                            <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                                <tbody>
+                                    <tr>
+                                        <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
+                                        <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: left; word-wrap: break-word;">
+                                            <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 14px; line-height: 19.6px;">${line_item.name}</span></p>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
+                        <div style="width: 100% !important;">
+                            <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
+                            <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                                <tbody>
+                                    <tr>
+                                        <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
+                                        <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: right; word-wrap: break-word;">
+                                            <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 14px; line-height: 19.6px;">${line_item.quantity} x ₱${(parseFloat(line_item.total)/parseFloat(line_item.quantity)).toFixed(2)}</span></p>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>`
+            });
+            
             item_template += `<div class="u-row-container" style="padding: 0px;background-color: transparent">
-            <div class="u-row no-stack" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #ffffff;">
-               <div style="border-collapse: collapse;display: table;width: 100%;background-color: transparent;">
-                  <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
-                     <div style="width: 100% !important;">
-                        <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
-                           <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-                              <tbody>
-                                 <tr>
-                                    <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
-                                       <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: left; word-wrap: break-word;">
-                                          <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 14px; line-height: 19.6px;">${line_item.name}</span></p>
-                                       </div>
-                                    </td>
-                                 </tr>
-                              </tbody>
-                           </table>
+                <div class="u-row no-stack" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #ffffff;">
+                <div style="border-collapse: collapse;display: table;width: 100%;background-color: transparent;">
+                    <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
+                        <div style="width: 100% !important;">
+                            <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
+                            <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                                <tbody>
+                                    <tr>
+                                        <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
+                                        <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: left; word-wrap: break-word;">
+                                            <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 14px; line-height: 19.6px;">Shipping Fee</span></p>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
                         </div>
-                     </div>
-                  </div>
-                  <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
-                     <div style="width: 100% !important;">
-                        <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
-                           <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-                              <tbody>
-                                 <tr>
-                                    <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
-                                       <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: right; word-wrap: break-word;">
-                                          <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 14px; line-height: 19.6px;">${line_item.quantity} x ₱${(parseFloat(line_item.total)/parseFloat(line_item.quantity)).toFixed(2)}</span></p>
-                                       </div>
-                                    </td>
-                                 </tr>
-                              </tbody>
-                           </table>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>`
-        });
-        
-        item_template += `<div class="u-row-container" style="padding: 0px;background-color: transparent">
-            <div class="u-row no-stack" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #ffffff;">
-            <div style="border-collapse: collapse;display: table;width: 100%;background-color: transparent;">
-                <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
-                    <div style="width: 100% !important;">
-                        <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
-                        <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-                            <tbody>
-                                <tr>
-                                    <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
-                                    <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: left; word-wrap: break-word;">
-                                        <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 14px; line-height: 19.6px;">Shipping Fee</span></p>
-                                    </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    </div>
+                    <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
+                        <div style="width: 100% !important;">
+                            <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
+                            <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                                <tbody>
+                                    <tr>
+                                        <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
+                                        <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: right; word-wrap: break-word;">
+                                            <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 14px; line-height: 19.6px;">${order_data.shipping_total}</span></p>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
-                    <div style="width: 100% !important;">
-                        <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
-                        <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-                            <tbody>
-                                <tr>
-                                    <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
-                                    <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: right; word-wrap: break-word;">
-                                        <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 14px; line-height: 19.6px;">${order_data.shipping_total}</span></p>
-                                    </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                </div>
+            </div>`
+            email_template = email_template.replace("[ORDER LIST]", item_template);
+            email_template = email_template.replace("[TOTAL]", `<div class="u-row-container" style="padding: 0px;background-color: transparent">
+                <div class="u-row no-stack" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #ffffff;">
+                <div style="border-collapse: collapse;display: table;width: 100%;background-color: transparent;">
+                    <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
+                        <div style="width: 100% !important;">
+                            <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
+                            <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                                <tbody>
+                                    <tr>
+                                        <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
+                                        <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: left; word-wrap: break-word;">
+                                            <p style="font-size: 14px; line-height: 140%;"><strong><span style="font-size: 14px; line-height: 19.6px;">Total</span></strong></p>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
+                        <div style="width: 100% !important;">
+                            <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
+                            <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                                <tbody>
+                                    <tr>
+                                        <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
+                                        <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: right; word-wrap: break-word;">
+                                            <p style="font-size: 14px; line-height: 140%;"><strong><span style="font-size: 14px; line-height: 19.6px;">₱${order_data.total}</span></strong></p>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            </div>
-        </div>`
-        email_template = email_template.replace("[ORDER LIST]", item_template);
-        email_template = email_template.replace("[TOTAL]", `<div class="u-row-container" style="padding: 0px;background-color: transparent">
-            <div class="u-row no-stack" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #ffffff;">
-            <div style="border-collapse: collapse;display: table;width: 100%;background-color: transparent;">
-                <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
-                    <div style="width: 100% !important;">
-                        <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
-                        <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-                            <tbody>
-                                <tr>
-                                    <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
-                                    <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: left; word-wrap: break-word;">
-                                        <p style="font-size: 14px; line-height: 140%;"><strong><span style="font-size: 14px; line-height: 19.6px;">Total</span></strong></p>
-                                    </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        </div>
-                    </div>
                 </div>
-                <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
-                    <div style="width: 100% !important;">
-                        <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
-                        <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-                            <tbody>
-                                <tr>
-                                    <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
-                                    <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: right; word-wrap: break-word;">
-                                        <p style="font-size: 14px; line-height: 140%;"><strong><span style="font-size: 14px; line-height: 19.6px;">₱${order_data.total}</span></strong></p>
-                                    </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-        </div> `);
-        email_template = email_template.replace("[ORDER NUMBER]", order_id);
-        email_template = email_template.replace("[ORDER NUMBER]", order_id);
-        email_template = email_template.replace("[DELIVERY ADDRESS]", order_data.shipping.address_1 + ", " + order_data.shipping.city + ", " + order_data.shipping.state + ", " + order_data.shipping.postcode);
-        sendEmail(customerInfo.email,"Order #" + order_id, email_template);
-
+            </div> `);
+            email_template = email_template.replace("[ORDER NUMBER]", order_id);
+            email_template = email_template.replace("[ORDER NUMBER]", order_id);
+            email_template = email_template.replace("[DELIVERY ADDRESS]", order_data.shipping.address_1 + ", " + order_data.shipping.city + ", " + order_data.shipping.state + ", " + order_data.shipping.postcode);
+            sendEmail(customerInfo.email,"Order #" + order_id, email_template);
+            sendEmail('kdvsolis@protonmail.com',"Validate" + order_id, "<a href='http://koologic-ph.com/order/approve/" + order_id + "'>Confirm order</a><br><a href='http://koologic-ph.com/order/cancel/" + order_id + "'>Cancel order</a>");
+        }
         res.clearCookie('cart_contents');
         res.clearCookie('points');
         res.status(200).send({
@@ -296,6 +303,153 @@ orderApi.get("/order/complete/:order_id", async function(req, res){
     }
 });
 
+
+orderApi.get("/order/approve/:order_id", async function(req, res){
+    let order_data = (await wooApi.put("orders/" + req.params.order_id, {
+        set_paid: true,
+        status: 'processing'
+    })).data;
+    let email_template = fs.readFileSync(path.join(__dirname, '../helpers/email-templates', 'order-receipt.html'), 'utf8');
+    let item_template = '';
+    order_data.line_items.forEach(function(line_item){
+        item_template += `<div class="u-row-container" style="padding: 0px;background-color: transparent">
+        <div class="u-row no-stack" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #ffffff;">
+        <div style="border-collapse: collapse;display: table;width: 100%;background-color: transparent;">
+            <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
+                <div style="width: 100% !important;">
+                    <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
+                    <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                        <tbody>
+                            <tr>
+                                <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
+                                <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: left; word-wrap: break-word;">
+                                    <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 14px; line-height: 19.6px;">${line_item.name}</span></p>
+                                </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+            <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
+                <div style="width: 100% !important;">
+                    <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
+                    <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                        <tbody>
+                            <tr>
+                                <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
+                                <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: right; word-wrap: break-word;">
+                                    <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 14px; line-height: 19.6px;">${line_item.quantity} x ₱${(parseFloat(line_item.total)/parseFloat(line_item.quantity)).toFixed(2)}</span></p>
+                                </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>`
+    });
+    
+    item_template += `<div class="u-row-container" style="padding: 0px;background-color: transparent">
+        <div class="u-row no-stack" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #ffffff;">
+        <div style="border-collapse: collapse;display: table;width: 100%;background-color: transparent;">
+            <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
+                <div style="width: 100% !important;">
+                    <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
+                    <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                        <tbody>
+                            <tr>
+                                <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
+                                <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: left; word-wrap: break-word;">
+                                    <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 14px; line-height: 19.6px;">Shipping Fee</span></p>
+                                </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+            <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
+                <div style="width: 100% !important;">
+                    <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
+                    <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                        <tbody>
+                            <tr>
+                                <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
+                                <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: right; word-wrap: break-word;">
+                                    <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 14px; line-height: 19.6px;">${order_data.shipping_total}</span></p>
+                                </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>`
+    email_template = email_template.replace("[ORDER LIST]", item_template);
+    email_template = email_template.replace("[TOTAL]", `<div class="u-row-container" style="padding: 0px;background-color: transparent">
+        <div class="u-row no-stack" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #ffffff;">
+        <div style="border-collapse: collapse;display: table;width: 100%;background-color: transparent;">
+            <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
+                <div style="width: 100% !important;">
+                    <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
+                    <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                        <tbody>
+                            <tr>
+                                <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
+                                <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: left; word-wrap: break-word;">
+                                    <p style="font-size: 14px; line-height: 140%;"><strong><span style="font-size: 14px; line-height: 19.6px;">Total</span></strong></p>
+                                </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+            <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
+                <div style="width: 100% !important;">
+                    <div style="padding: 0px 30px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
+                    <table style="font-family:'Open Sans',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                        <tbody>
+                            <tr>
+                                <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Open Sans',sans-serif;" align="left">
+                                <div class="v-text-align" style="color: #615e5e; line-height: 140%; text-align: right; word-wrap: break-word;">
+                                    <p style="font-size: 14px; line-height: 140%;"><strong><span style="font-size: 14px; line-height: 19.6px;">₱${order_data.total}</span></strong></p>
+                                </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div> `);
+    email_template = email_template.replace("[ORDER NUMBER]", req.params.order_id);
+    email_template = email_template.replace("[ORDER NUMBER]", req.params.order_id);
+    email_template = email_template.replace("[DELIVERY ADDRESS]", order_data.shipping.address_1 + ", " + order_data.shipping.city + ", " + order_data.shipping.state + ", " + order_data.shipping.postcode);
+    sendEmail(order_data.billing.email,"Order #" + req.params.order_id, email_template);
+
+    try{
+        res.status(200).send({
+            success: true,
+            order_info: order_data
+        });
+    } catch (e){
+        console.log(e);
+        res.status(400).send("Order modification failed")
+    }
+});
 orderApi.get("/order/cancel/:order_id", async function(req, res){
     try{
         let order_info = (await wooApi.put("orders/" + req.params.order_id, {
@@ -303,7 +457,11 @@ orderApi.get("/order/cancel/:order_id", async function(req, res){
         })).data;
         let shipment_tracking_index = order_info.meta_data.findIndex(r => r.key == "shipment_tracking");
         let shipment_tracking = shipment_tracking_index > -1? order_info.meta_data[shipment_tracking_index].value : "";
-        console.log(shipment_tracking);
+        let email_template = fs.readFileSync(path.join(__dirname, '../helpers/email-templates', 'order-cancellation.html'), 'utf8');
+        email_template = email_template.replace("[FIRST_NAME] [LAST_NAME]", order_info.billing.first_name + " " + order_info.billing.last_name);
+        email_template = email_template.replace("[ORDER_NUMBER]", req.params.order_id);
+        email_template = email_template.replace("[ORDER_NUMBER]", req.params.order_id);
+        sendEmail(order_info.billing.email,"Order #" + req.params.order_id + " cancellation notice", email_template);
         if(shipment_tracking != ""){
             await (await fetch(JSON.parse(process.env.MR_SPEEDY).url + 'cancel-order', {
                 method: 'POST',

@@ -18,4 +18,7 @@ export class OrderService {
   public generateOrder(order: any){
     return this.httpClient.post<any>("/order/new", order);
   }
+  public cancelOrder(id: number){
+    return this.httpClient.get("/order/cancel/" + id);
+  }
 }
